@@ -5,17 +5,27 @@
  */
 package project;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author gerai
  */
 public class CustomerForm extends javax.swing.JFrame {
+    private int customerIdCounter;
 
     /**
      * Creates new form CustomerForm
      */
     public CustomerForm() {
         initComponents();
+        customerIdCounter = generateCustomerId();
+        txtID.setText(String.valueOf(customerIdCounter));
     }
 
     /**
@@ -36,6 +46,10 @@ public class CustomerForm extends javax.swing.JFrame {
         txtTelNo = new javax.swing.JTextField();
         submitButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtID = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,8 +69,24 @@ public class CustomerForm extends javax.swing.JFrame {
         });
 
         submitButton.setText("Submit");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
+            }
+        });
 
         resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Email");
+
+        jLabel6.setText("ID");
+
+        txtID.setText("Current_ID");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,33 +96,49 @@ public class CustomerForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(90, 90, 90)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                                    .addComponent(txtTelNo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel3))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtSurname, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                                        .addComponent(txtFirstName))))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(46, 46, 46)
+                                        .addComponent(jLabel5)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtTelNo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtSurname, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                                            .addComponent(txtFirstName)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(65, 65, 65)
+                                        .addComponent(jLabel6))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(128, 128, 128)
                         .addComponent(submitButton)
                         .addGap(30, 30, 30)
                         .addComponent(resetButton)))
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(txtID)
+                .addGap(66, 66, 66))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6)
+                    .addComponent(txtID))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -105,11 +151,15 @@ public class CustomerForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtTelNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(131, 131, 131)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(94, 94, 94)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitButton)
                     .addComponent(resetButton))
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
 
         pack();
@@ -118,6 +168,79 @@ public class CustomerForm extends javax.swing.JFrame {
     private void txtSurnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSurnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSurnameActionPerformed
+
+    private int generateCustomerId() {
+        int customerId = 1; // Default starting ID
+
+        try (Scanner scanner = new Scanner(new File("customer.txt"))) {
+            String lastLine = "";
+            while (scanner.hasNextLine()) {
+                lastLine = scanner.nextLine();
+            }
+
+            if (!lastLine.isEmpty()) {
+                String[] parts = lastLine.split(",");
+                if (parts.length > 0) {
+                    customerId = Integer.parseInt(parts[0]) + 1;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            return customerId;
+            // File doesn't exist, start with ID 1
+        }
+
+        return customerId;
+    }
+    
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        // Get the details from the textboxes
+        String firstName = txtFirstName.getText();
+        String surname = txtSurname.getText();
+        String telNo = txtTelNo.getText();
+        String email = txtEmail.getText();
+
+        // Validate the input using the Validation class
+        Validation validation = new Validation();
+        if (validation.presence(firstName)) {
+            JOptionPane.showMessageDialog(this, "Please enter a first name.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if (validation.presence(surname)) {
+            JOptionPane.showMessageDialog(this, "Please enter a surname.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if (validation.presence(telNo)) {
+            JOptionPane.showMessageDialog(this, "Please enter a telephone number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if (validation.presence(email)) {
+            JOptionPane.showMessageDialog(this, "Please enter an email", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Write the details to the file
+        try (FileWriter writer = new FileWriter("customer.txt", true)) {
+            writer.write(customerIdCounter+","+firstName + "," + surname + "," + telNo +"," +email+ "\n");
+            JOptionPane.showMessageDialog(this, "Customer details saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    txtFirstName.setText("");
+                    txtSurname.setText("");
+                    txtTelNo.setText("");
+                    txtEmail.setText("");
+                    customerIdCounter++;
+                    txtID.setText(String.valueOf(customerIdCounter));
+                    
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+     // TODO add your handling code here:
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        txtFirstName.setText("");
+        txtSurname.setText("");
+        txtTelNo.setText("");
+        txtEmail.setText("");
+    }//GEN-LAST:event_resetButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,9 +282,13 @@ public class CustomerForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton submitButton;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstName;
+    private javax.swing.JLabel txtID;
     private javax.swing.JTextField txtSurname;
     private javax.swing.JTextField txtTelNo;
     // End of variables declaration//GEN-END:variables
