@@ -80,6 +80,11 @@ public class ProductsForm extends javax.swing.JFrame {
         bttnSave.setText("Save");
 
         bttnReset.setText("Reset");
+        bttnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnResetActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Multi File Impot");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -202,6 +207,15 @@ public class ProductsForm extends javax.swing.JFrame {
         FileChooser f1 = new FileChooser();
         f1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void bttnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnResetActionPerformed
+        
+        txtName.setText("");
+        txtDesc.setText("");
+        txtSales.setText("");
+        txtCost.setText("");
+        txtCategory.setSelectedIndex(-1);
+    }//GEN-LAST:event_bttnResetActionPerformed
 
     /**
      * @param args the command line arguments
