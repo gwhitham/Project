@@ -4,17 +4,28 @@
  */
 package project;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author gera0276
  */
 public class ProductsForm extends javax.swing.JFrame {
-
+    //Instantiate an object of the Validation class
+    Validation v = new Validation();
     /**
      * Creates new form ProductsForm
      */
     public ProductsForm() {
         initComponents();
+        bttnConfirm.setVisible(false);
     }
 
     /**
@@ -47,6 +58,8 @@ public class ProductsForm extends javax.swing.JFrame {
         bttnSave = new javax.swing.JButton();
         bttnReset = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        lblConfirm = new javax.swing.JLabel();
+        bttnConfirm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +91,11 @@ public class ProductsForm extends javax.swing.JFrame {
         bttnCalculate.setText("Calculate Sales Price");
 
         bttnSave.setText("Save");
+        bttnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnSaveActionPerformed(evt);
+            }
+        });
 
         bttnReset.setText("Reset");
         bttnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -86,12 +104,14 @@ public class ProductsForm extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Multi File Impot");
+        jButton1.setText("Multi File Import");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        bttnConfirm.setText("Confirm");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,12 +162,18 @@ public class ProductsForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(119, 119, 119)
-                        .addComponent(bttnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bttnReset))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(29, 29, 29)
+                                .addComponent(bttnConfirm))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bttnSave)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bttnReset))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(jButton1)))
+                        .addGap(153, 153, 153)
+                        .addComponent(lblConfirm)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -181,7 +207,7 @@ public class ProductsForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9))
@@ -196,16 +222,35 @@ public class ProductsForm extends javax.swing.JFrame {
                     .addComponent(bttnSave)
                     .addComponent(bttnReset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addGap(25, 25, 25))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(bttnConfirm))
+                .addGap(3, 3, 3)
+                .addComponent(lblConfirm)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        FileChooser f1 = new FileChooser();
-        f1.setVisible(true);
+      final String EXTENSION = ".csv";
+      JFileChooser fileChooser = new JFileChooser();
+      int returnValue = fileChooser.showOpenDialog(null);
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        String fileName = selectedFile.getName();
+        System.out.print(fileName);
+        if (fileName.endsWith(EXTENSION)) {
+            selectedFile = new File("C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\"+fileName);
+            bttnConfirm.setVisible(true);
+            lblConfirm.setText("Confirm file is "+fileName);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Incorrect file type", "Error", JOptionPane.ERROR_MESSAGE);
+            
+        }
+      }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void bttnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnResetActionPerformed
@@ -216,6 +261,85 @@ public class ProductsForm extends javax.swing.JFrame {
         txtCost.setText("");
         txtCategory.setSelectedIndex(-1);
     }//GEN-LAST:event_bttnResetActionPerformed
+private boolean validateInputFields() {
+        // Check if product ID is a positive integer
+        try {
+            int productId = Integer.parseInt(txtID.getText());
+            if (productId <= 0) {
+                JOptionPane.showMessageDialog(this, "Product ID must be a positive integer.", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Product ID must be a positive integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //Use the presence method from the Validation class to check if name and description are empty
+        if (v.presence(txtName.getText()) || v.presence(txtDesc.getText())) {
+            JOptionPane.showMessageDialog(this, "Product name and description cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Check if price and quantity are positive numbers
+        try {
+            double price = Double.parseDouble(txtCost.getText());
+            if (price <= 0) {
+                JOptionPane.showMessageDialog(this, "Price must be a positive number.", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Price must be a positive number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            int quantity = Integer.parseInt(txtQty.getText());
+            if (quantity <= 0) {
+                JOptionPane.showMessageDialog(this, "Quantity must be a positive integer.", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Quantity must be a positive integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+    private void bttnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnSaveActionPerformed
+        // Validate input fields
+        if (!validateInputFields()) {
+            return;
+        }
+
+        // Get product information
+        String productId = txtID.getText(); // Use txtID instead of txtProductID
+        String productName = txtName.getText(); // Use txtName instead of txtProductName
+        String productDescription = txtDesc.getText(); // Use txtDesc instead of txtProductDescription
+        String price = txtCost.getText(); // Use txtCost instead of txtPrice
+        String costPrice = txtCost.getText();
+        String quantity = txtQty.getText(); // Use txtQty instead of txtQuantity
+        String category = (String) txtCategory.getSelectedItem(); // Get selected category from txtCategory
+
+        // Save product information to file
+        try (FileWriter writer = new FileWriter("products.txt", true)) {
+            String productData = productId + "," + productName + "," + productDescription + "," + price + "," +costPrice+ "," + quantity + "," + category + "\n";
+            writer.write(productData);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving product information to file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Reset input fields
+        txtName.setText("");
+        txtDesc.setText("");
+        txtSales.setText("");
+        txtCost.setText("");
+        txtCategory.setSelectedIndex(-1);
+
+        JOptionPane.showMessageDialog(this, "Product saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+    
+
+    }//GEN-LAST:event_bttnSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,6 +378,7 @@ public class ProductsForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bttnCalculate;
+    private javax.swing.JButton bttnConfirm;
     private javax.swing.JButton bttnReset;
     private javax.swing.JButton bttnSave;
     private javax.swing.JButton jButton1;
@@ -267,6 +392,7 @@ public class ProductsForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblConfirm;
     private javax.swing.JComboBox<String> txtCategory;
     private javax.swing.JTextField txtCost;
     private javax.swing.JTextArea txtDesc;
