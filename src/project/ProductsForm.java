@@ -4,9 +4,12 @@
  */
 package project;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,6 +25,7 @@ import javax.swing.JOptionPane;
 public class ProductsForm extends javax.swing.JFrame {
     //Instantiate an object of the Validation class
     Validation v = new Validation();
+    String gfilename = "";
     /**
      * Creates new form ProductsForm
      */
@@ -134,6 +138,11 @@ public class ProductsForm extends javax.swing.JFrame {
         });
 
         bttnConfirm.setText("Confirm");
+        bttnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnConfirmActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -262,7 +271,7 @@ public class ProductsForm extends javax.swing.JFrame {
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File selectedFile = fileChooser.getSelectedFile();
         String fileName = selectedFile.getName();
-        System.out.print(fileName);
+        gfilename = fileName;
         if (fileName.endsWith(EXTENSION)) {
             try {
                 copyImage(selectedFile, "C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\");
@@ -367,6 +376,32 @@ private boolean validateInputFields() {
     
 
     }//GEN-LAST:event_bttnSaveActionPerformed
+
+    private void bttnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnConfirmActionPerformed
+        FileReader fr = null;
+        try {
+            fr = new FileReader(gfilename);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            if((line=br.readLine())==null){
+                JOptionPane.showMessageDialog(this, "Incorrect file format, import unsuccesful.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                lblConfirm.setText("");
+                bttnConfirm.setVisible(false);
+                
+                return;
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProductsForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsForm.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProductsForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_bttnConfirmActionPerformed
 
     /**
      * @param args the command line arguments
