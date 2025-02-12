@@ -5,6 +5,8 @@
 package project;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -27,7 +29,27 @@ public class ProductsForm extends javax.swing.JFrame {
         initComponents();
         bttnConfirm.setVisible(false);
     }
+    
+    private static void copyImage(File sourceFile, String destinationDirectory) throws IOException {
+        // Create the destination directory if it doesn't exist
+        File directory = new File(destinationDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
 
+        // Create the destination file
+        File destinationFile = new File(destinationDirectory + sourceFile.getName());
+
+        // Copy the image using FileInputStream and FileOutputStream
+        try (FileInputStream fis = new FileInputStream(sourceFile);
+             FileOutputStream fos = new FileOutputStream(destinationFile)) {
+            byte [] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                fos.write(buffer, 0, length);
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -242,7 +264,12 @@ public class ProductsForm extends javax.swing.JFrame {
         String fileName = selectedFile.getName();
         System.out.print(fileName);
         if (fileName.endsWith(EXTENSION)) {
-            selectedFile = new File("C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\"+fileName);
+            try {
+                copyImage(selectedFile, "C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\");
+            } catch (IOException ex) {
+                Logger.getLogger(ProductsForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             bttnConfirm.setVisible(true);
             lblConfirm.setText("Confirm file is "+fileName);
         }
