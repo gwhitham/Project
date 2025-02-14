@@ -34,7 +34,7 @@ public class ProductsForm extends javax.swing.JFrame {
         bttnConfirm.setVisible(false);
     }
     
-    private static void copyImage(File sourceFile, String destinationDirectory) throws IOException {
+    private static void copyFile(File sourceFile, String destinationDirectory) throws IOException {
         // Create the destination directory if it doesn't exist
         File directory = new File(destinationDirectory);
         if (!directory.exists()) {
@@ -274,7 +274,7 @@ public class ProductsForm extends javax.swing.JFrame {
         gfilename = fileName;
         if (fileName.endsWith(EXTENSION)) {
             try {
-                copyImage(selectedFile, "C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\");
+                copyFile(selectedFile, "C:\\Users\\gera0276\\Documents\\NetBeansProjects\\Project\\");
             } catch (IOException ex) {
                 Logger.getLogger(ProductsForm.class.getName()).log(Level.SEVERE, null, ex);
             }
