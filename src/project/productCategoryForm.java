@@ -79,6 +79,11 @@ public class productCategoryForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listCat);
 
         jButton1.setText("Remove Items");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Add Category");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -156,6 +161,39 @@ public class productCategoryForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String item = listCat.getSelectedValue();
+        if(item.isEmpty()){
+            JOptionPane.showMessageDialog(rootPane, "You must choose a value");
+        }
+        else{
+            try {
+                getCategories();
+                try (FileWriter writer = new FileWriter("category.txt", false)) { // false overwrites
+            // Empty FileWriter effectively clears the file
+            FileWriter fw = new FileWriter("category.txt",true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for(String cat:cats){
+                if(!cat.equals(item)){
+                   bw.write(cat);
+                    bw.newLine(); 
+                }
+                
+            }
+            bw.close();
+            JOptionPane.showMessageDialog(rootPane, item+" Deleted");
+             getCategories();
+                setCategories();
+        } catch (IOException e) {
+            System.err.println("Error clearing file using FileWriter: " + e.getMessage());
+        }
+            } catch (IOException ex) {
+                Logger.getLogger(productCategoryForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

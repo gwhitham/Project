@@ -1,5 +1,5 @@
 Hardware
 Software
-Peripherals
-Cables
 AV
+Peripherals
+Servers
