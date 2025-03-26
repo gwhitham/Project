@@ -4,6 +4,8 @@
  */
 package project;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author gera0276
@@ -120,6 +122,9 @@ public class Login extends javax.swing.JFrame {
             AdminMenu m1 = new AdminMenu();
             m1.setVisible(true);
             this.setVisible(false);
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Incorrect username or password");
         }
     }//GEN-LAST:event_bttnLoginActionPerformed
 

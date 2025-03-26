@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +31,42 @@ public class Utils {
         }
         return lineCount;
     }
+    
+    public int countFields(String fileName) throws FileNotFoundException, IOException{
+        int fieldCount = 0;
+        String line;
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            while ((line=reader.readLine())!= null) {
+                String [] items = line.split(",");
+                fieldCount = items.length;
+                return fieldCount;
+            }
+        }
+        return fieldCount;
+    }
+    
+    public String[][] getFileToArray(String filename){
+        String [][] arr = null;
+        try {
+            arr = new String [countLines(filename)][countFields(filename)];
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            int count = 0;
+            while ((line=reader.readLine())!= null) {
+                String [] items = line.split(",");
+                for(int i=0; i<items.length;i++){
+                    arr[count][i] = items[i];
+                }
+                count++;
+            }
+        }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return arr;
+    }
+    
     public void saveImageToFolder(File selectedFile, String folder) {
         String destinationFolder = folder; // Specify your desired folder
         File destinationDir = new File(destinationFolder);
