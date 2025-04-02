@@ -15,8 +15,11 @@ public class Project {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MainMenu menu = new MainMenu();
-        menu.setVisible(true);
+        MainMenu df = new MainMenu();
+        MainMenu menu2 = new MainMenu();
+        MainMenu menu3 = new MainMenu();
+        df.setVisible(true);
+        menu2.setVisible(true);
     }
     
 }
