@@ -24,10 +24,14 @@ package project;
  import java.io.File;
  import java.io.IOException;
  import java.io.BufferedReader;
+import java.io.BufferedWriter;
  import java.io.FileReader;
+import java.io.FileWriter;
  import java.util.logging.Level;
  import java.util.logging.Logger;
  import java.text.NumberFormat; // For currency formatting
+import java.time.LocalDate;
+import java.time.LocalDateTime;
  import java.util.Locale;       // For currency formatting
 
 
@@ -38,12 +42,14 @@ package project;
      // Create a currency formatter
      private static final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.UK);
      private static final String TOTAL_ROW_IDENTIFIER = "TOTAL:"; // To identify the total row
-
+     private static int totalRowIndex = -1;
+     ComboItem [] c1;
 
      public TillSystem() throws IOException {
          initComponents();
          txtUser.setText(MainMenu.user);
          setButtons();
+         fillCustomers();
          initializeBasketTable();
          // Ensure the image folder exists (optional robustness check)
          File imgDir = new File(IMAGE_FOLDER);
@@ -51,11 +57,27 @@ package project;
              System.out.println("Warning: Image directory '" + IMAGE_FOLDER + "' not found.");
          }
      }
-
+     private void fillCustomers() throws IOException{
+         String [][] customers = u1.getFileToArray("customer.txt");
+         String [] dropContent =null;
+         int lines = u1.countLines("customer.txt");
+         
+         dropContent = new String [lines];
+         
+         int count = 0;
+         c1 = new ComboItem[lines];
+         jComboBoxCustomer.removeAllItems();
+         for(String [] ind:customers){
+            c1[count] = new ComboItem(ind[1]+" "+ind[2],Integer.parseInt(ind[0]));
+            jComboBoxCustomer.addItem(ind[0]+" "+ind[1]);
+            dropContent[count] = ind[0]+" "+ind[1];
+            count++;
+        }
+     }
      private void initializeBasketTable() {
          basketModel = new DefaultTableModel(
                  // Updated column names
-                 new String[]{"Item", "Qty", "Unit Price", "Subtotal"}, 0
+                 new String[]{"Item", "product ID", "Qty", "Unit Price", "Subtotal"}, 0
          ) {
              @Override
              public boolean isCellEditable(int row, int column) {
@@ -69,9 +91,10 @@ package project;
                  // Define column types for proper sorting and rendering
                  switch (columnIndex) {
                      case 0: return String.class;   // Item Name
-                     case 1: return Integer.class;  // Qty
-                     case 2: return Object.class;   // Unit Price (or TOTAL label) - Use Object for flexibility
-                     case 3: return Double.class;   // Subtotal / Total Value
+                     case 1: return Integer.class;  // ID
+                     case 2: return Integer.class;  // Qty
+                     case 3: return Object.class;   // Unit Price (or TOTAL label) - Use Object for flexibility
+                     case 4: return Double.class;   // Subtotal / Total Value
                      default: return Object.class;
                  }
              }
@@ -107,14 +130,15 @@ package project;
                  return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
              }
          };
-         tblTotal.getColumnModel().getColumn(2).setCellRenderer(rightRenderer); // Unit Price
-         tblTotal.getColumnModel().getColumn(3).setCellRenderer(rightRenderer); // Subtotal/Total
+         tblTotal.getColumnModel().getColumn(3).setCellRenderer(rightRenderer); // Unit Price
+         tblTotal.getColumnModel().getColumn(4).setCellRenderer(rightRenderer); // Subtotal/Total
 
          // Set preferred column widths
          tblTotal.getColumnModel().getColumn(0).setPreferredWidth(130); // Item
-         tblTotal.getColumnModel().getColumn(1).setPreferredWidth(40);  // Qty
-         tblTotal.getColumnModel().getColumn(2).setPreferredWidth(70);  // Unit Price
-         tblTotal.getColumnModel().getColumn(3).setPreferredWidth(80);  // Subtotal
+         tblTotal.getColumnModel().getColumn(1).setPreferredWidth(40); // ID
+         tblTotal.getColumnModel().getColumn(2).setPreferredWidth(40);  // Qty
+         tblTotal.getColumnModel().getColumn(3).setPreferredWidth(70);  // Unit Price
+         tblTotal.getColumnModel().getColumn(4).setPreferredWidth(80);  // Subtotal
 
          // Add initial total row
          updateTotalRow();
@@ -124,6 +148,7 @@ package project;
          String[][] products = u1.getFileToArray("products.txt");
          for (String[] product : products) {
              if (product.length > 4 && product[0] != null && product[0].equals(ID)) { // Ensure product[4] exists
+                 String productID = product[0];
                  String itemName = product[1];
                  String unitPriceStr = product[4]; // Get unit price string (index 4)
                  try {
@@ -134,18 +159,18 @@ package project;
                      boolean itemUpdated = false;
                      for (int i = 0; i < basketModel.getRowCount(); i++) {
                          // Skip the TOTAL row if it exists
-                         if(basketModel.getValueAt(i, 2) != null && basketModel.getValueAt(i, 2).equals(TOTAL_ROW_IDENTIFIER)) {
+                         if(basketModel.getValueAt(i, 3) != null && basketModel.getValueAt(i, 3).equals(TOTAL_ROW_IDENTIFIER)) {
                              continue;
                          }
 
                          if (basketModel.getValueAt(i, 0) != null && basketModel.getValueAt(i, 0).equals(itemName)) {
-                             int existingQty = (int) basketModel.getValueAt(i, 1);
+                             int existingQty = (int) basketModel.getValueAt(i, 2);
                              int newQty = existingQty + quantity;
                              double newSubtotal = unitPrice * newQty; // Recalculate subtotal based on new qty
 
-                             basketModel.setValueAt(newQty, i, 1);        // Update Qty (col 1)
+                             basketModel.setValueAt(newQty, i, 2);        // Update Qty (col 1)
                              // Unit price (col 2) remains the same
-                             basketModel.setValueAt(newSubtotal, i, 3);   // Update Subtotal (col 3)
+                             basketModel.setValueAt(newSubtotal, i, 4);   // Update Subtotal (col 3)
                              itemUpdated = true;
                              break; // Exit loop once updated
                          }
@@ -155,12 +180,12 @@ package project;
                      if (!itemUpdated) {
                          // Add item row BEFORE the total row
                          int insertRow = basketModel.getRowCount() > 0 ? basketModel.getRowCount() -1 : 0; // Default to 0 if empty, else before last row
-                         if (basketModel.getRowCount() > 0 && basketModel.getValueAt(insertRow, 2) != null && basketModel.getValueAt(insertRow, 2).equals(TOTAL_ROW_IDENTIFIER)) {
+                         if (basketModel.getRowCount() > 0 && basketModel.getValueAt(insertRow, 3) != null && basketModel.getValueAt(insertRow, 3).equals(TOTAL_ROW_IDENTIFIER)) {
                            // Correct index found
                          } else {
                             insertRow = basketModel.getRowCount(); // If no total row yet, append
                          }
-                         basketModel.insertRow(insertRow, new Object[]{itemName, quantity, unitPrice, subtotal});
+                         basketModel.insertRow(insertRow, new Object[]{itemName,productID, quantity, unitPrice, subtotal});
                      }
 
                      // Update the total row after any change
@@ -179,16 +204,16 @@ package project;
 
     private void updateTotalRow() {
         double total = 0.0;
-        int totalRowIndex = -1;
+        
 
         // Calculate total and find existing total row
         for (int i = 0; i < basketModel.getRowCount(); i++) {
-            Object cellValue = basketModel.getValueAt(i, 2); // Check the "Unit Price" column for the identifier
+            Object cellValue = basketModel.getValueAt(i, 3); // Check the "Unit Price" column for the identifier
             if (cellValue != null && cellValue.equals(TOTAL_ROW_IDENTIFIER)) {
                 totalRowIndex = i;
             } else {
                 // Make sure value is a number before adding
-                Object subtotalValue = basketModel.getValueAt(i, 3);
+                Object subtotalValue = basketModel.getValueAt(i, 4);
                  if (subtotalValue instanceof Number) {
                     total += ((Number) subtotalValue).doubleValue();
                  }
@@ -202,7 +227,7 @@ package project;
 
         // Add the new total row at the end
         // Ensure correct types are added (String, null/Integer, String, Double)
-        basketModel.addRow(new Object[]{null, null, TOTAL_ROW_IDENTIFIER, total});
+        basketModel.addRow(new Object[]{null, null, null, TOTAL_ROW_IDENTIFIER, total});
 
         // Optional: Scroll to make the total row visible if the table has a scroll pane
         // if (jScrollPane1 != null) {
@@ -365,6 +390,8 @@ package project;
         bttnBack = new javax.swing.JButton();
         jPanelCompleteOrder = new javax.swing.JPanel();
         jButtonCompleteOrder = new javax.swing.JButton();
+        jComboBoxCustomer = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -505,20 +532,36 @@ package project;
 
         jButtonCompleteOrder.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButtonCompleteOrder.setText("Complete");
+        jButtonCompleteOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCompleteOrderActionPerformed(evt);
+            }
+        });
+
+        jComboBoxCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel3.setText("Select Customer");
 
         javax.swing.GroupLayout jPanelCompleteOrderLayout = new javax.swing.GroupLayout(jPanelCompleteOrder);
         jPanelCompleteOrder.setLayout(jPanelCompleteOrderLayout);
         jPanelCompleteOrderLayout.setHorizontalGroup(
             jPanelCompleteOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCompleteOrderLayout.createSequentialGroup()
-                .addContainerGap(163, Short.MAX_VALUE)
-                .addComponent(jButtonCompleteOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(74, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(52, 52, 52)
+                .addGroup(jPanelCompleteOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCompleteOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
         jPanelCompleteOrderLayout.setVerticalGroup(
             jPanelCompleteOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCompleteOrderLayout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
+                .addGroup(jPanelCompleteOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(jButtonCompleteOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -598,6 +641,59 @@ package project;
         }
     }//GEN-LAST:event_bttnBackActionPerformed
 
+    private void jButtonCompleteOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompleteOrderActionPerformed
+       String custID = jComboBoxCustomer.getSelectedItem().toString();
+        if(totalRowIndex==-1){
+            JOptionPane.showMessageDialog(rootPane, "No items have been added to the basket");
+        }
+        else{
+            FileWriter fw = null;
+           try {
+               String [] details = custID.split(" ");
+               int id = Integer.parseInt(details[0]);
+               System.out.println(id);
+               int orderID = u1.getID("orders.txt");
+               fw = new FileWriter("orders.txt",true);
+               BufferedWriter bw = new BufferedWriter(fw);
+               String date = LocalDateTime.now().toString();
+               bw.write(orderID+","+id+","+basketModel.getValueAt(basketModel.getRowCount()-1, 4)+","+date);
+               bw.newLine();
+               bw.close();
+               int productOrderID = u1.getID("productOrder.txt");
+               
+               Object[] columnData = new Object[basketModel.getRowCount()];  // One entry for each row
+               Object[] rowData = new Object [basketModel.getRowCount()];
+                
+                for (int i = 0; i < basketModel.getRowCount()-1; i++) {  // Loop through the rows
+                 // Record the 5th column value (index 4)
+                    int productID = Integer.parseInt(basketModel.getValueAt(i, 1).toString());
+                    int qty = Integer.parseInt(basketModel.getValueAt(i, 2).toString());
+                    double price = Double.parseDouble((basketModel.getValueAt(i, 3).toString()));
+                    System.out.println(qty+" "+price);
+                    FileWriter fw1 = new FileWriter("productOrder.txt",true);
+                    BufferedWriter bw1  = new BufferedWriter(fw1);
+                    bw1.write(productOrderID+","+orderID+","+productID+","+qty+","+price);
+                    bw1.newLine();
+                    bw1.close();
+                    productOrderID++;
+                }
+                
+               
+               
+           } catch (IOException ex) {
+               Logger.getLogger(TillSystem.class.getName()).log(Level.SEVERE, null, ex);
+           } finally {
+               try {
+                   fw.close();
+               } catch (IOException ex) {
+                   Logger.getLogger(TillSystem.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+            
+            
+        }
+    }//GEN-LAST:event_jButtonCompleteOrderActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -641,8 +737,10 @@ package project;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton bttnBack;
     private javax.swing.JButton jButtonCompleteOrder;
+    private javax.swing.JComboBox<String> jComboBoxCustomer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -30,6 +31,31 @@ public class Utils {
             }
         }
         return lineCount;
+    }
+    
+    //abstraction of the get customer ID, now we can generate an id based on any file
+    
+    public int getID(String filename) {
+        int Id = 1; // Default starting ID
+
+        try (Scanner scanner = new Scanner(new File(filename))) {
+            String lastLine = "";
+            while (scanner.hasNextLine()) {
+                lastLine = scanner.nextLine();
+            }
+
+            if (!lastLine.isEmpty()) {
+                String[] parts = lastLine.split(",");
+                if (parts.length > 0) {
+                    Id = Integer.parseInt(parts[0]) + 1;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            return Id;
+            // File doesn't exist, start with ID 1
+        }
+
+        return Id;
     }
     
     public int countFields(String fileName) throws FileNotFoundException, IOException{
