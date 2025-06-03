@@ -18,8 +18,9 @@ public class Project {
         MainMenu df = new MainMenu();
         MainMenu menu2 = new MainMenu();
         MainMenu menu3 = new MainMenu();
-        df.setVisible(true);
-        menu2.setVisible(true);
+        Login l1 = new Login();
+        //df.setVisible(true);
+        l1.setVisible(true);
     }
     
 }

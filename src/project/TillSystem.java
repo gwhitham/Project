@@ -75,6 +75,7 @@ import java.time.LocalDateTime;
         }
      }
      private void initializeBasketTable() {
+         totalRowIndex = -1;
          basketModel = new DefaultTableModel(
                  // Updated column names
                  new String[]{"Item", "product ID", "Qty", "Unit Price", "Subtotal"}, 0
@@ -204,7 +205,6 @@ import java.time.LocalDateTime;
 
     private void updateTotalRow() {
         double total = 0.0;
-        
 
         // Calculate total and find existing total row
         for (int i = 0; i < basketModel.getRowCount(); i++) {
@@ -677,6 +677,8 @@ import java.time.LocalDateTime;
                     bw1.close();
                     productOrderID++;
                 }
+                JOptionPane.showMessageDialog(rootPane, "Order Complete - Order ID"+orderID);
+                initializeBasketTable();
                 
                
                
