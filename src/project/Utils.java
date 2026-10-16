@@ -117,4 +117,13 @@ public class Utils {
         }
     }
     
+    public boolean checkArray(String searchTerm, int index, String [][] arr){
+        for(int i = 0; i<arr.length;i++){
+            if(arr[i][index].equals(searchTerm)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

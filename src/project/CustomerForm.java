@@ -254,7 +254,13 @@ public class CustomerForm extends javax.swing.JFrame {
 
         // Write the details to the file
         try (FileWriter writer = new FileWriter("customer.txt", true)) {
-            writer.write(customerIdCounter+","+firstName + "," + surname + "," + telNo +"," +email+ "\n");
+            Utils u1 = new Utils();
+            String [][] files = u1.getFileToArray("customer.txt");
+            if(u1.checkArray(txtID.getText(), 0, files)){
+                JOptionPane.showMessageDialog(this, "Cant duplicate ID", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                writer.write(txtID.getText()+","+firstName + "," + surname + "," + telNo +"," +email+ "\n");
             JOptionPane.showMessageDialog(this, "Customer details saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     txtFirstName.setText("");
                     txtSurname.setText("");
@@ -262,6 +268,8 @@ public class CustomerForm extends javax.swing.JFrame {
                     txtEmail.setText("");
                     customerIdCounter++;
                     txtID.setText(String.valueOf(customerIdCounter));
+            }
+            
                     
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -274,6 +282,8 @@ public class CustomerForm extends javax.swing.JFrame {
         txtSurname.setText("");
         txtTelNo.setText("");
         txtEmail.setText("");
+        customerIdCounter = generateCustomerId();
+        txtID.setText(String.valueOf(customerIdCounter));
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -297,6 +307,7 @@ public class CustomerForm extends javax.swing.JFrame {
                     txtSurname.setText(items[2]);
                     txtTelNo.setText(items[3]);
                     txtEmail.setText(items[4]);
+                    txtID.setText(items[0]);
                     found = true;
                 }
             }   if(!found){
