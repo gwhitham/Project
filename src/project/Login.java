@@ -123,6 +123,11 @@ public class Login extends javax.swing.JFrame {
             m1.setVisible(true);
             this.setVisible(false);
         }
+        else if(username.equals("user")&&password.equals("1234")){
+            MainMenu m1 = new MainMenu();
+            m1.setVisible(true);
+            this.setVisible(false);
+        }
         else{
             JOptionPane.showMessageDialog(rootPane, "Incorrect username or password");
         }

@@ -3,3 +3,4 @@
 3,Microsoft Office Home and Business 2024,Microsoft Office Home and Business 2024 Download PC or MAC Microsoft Office Home & Business 2024 is a comprehensive productivity suite designed for users who prefer a one-time purchase for essential Office applications making it an ideal choice for families small businesses and independent professionals. Offering a blend of modern features and classic tools this version continues Microsoft's tradition of reliability and functionality while enhancing user experience with new and improved elements.,235,200,50,Software,officeHB.jpg
 4,HP Z1 G9 Tower Workstation,Operating systemWindows 11 Pro ProcessorIntel® Core™ i5 14500 (14th Generation)Memory16 GB RAM Storage512 GB SSD GraphicsNVIDIA® T400 (4 GB),1250.56,1050,2,Servers,hp server.png
 5,RAm 64GB,Very big RAM,1750,1250,2,Hardware,ram.jpg
+6,Fan,Amazing Fan,60,50,20,Hardware,

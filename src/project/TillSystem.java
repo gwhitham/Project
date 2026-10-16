@@ -539,6 +539,11 @@ import java.time.LocalDateTime;
         });
 
         jComboBoxCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxCustomerActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Select Customer");
 
@@ -696,6 +701,10 @@ import java.time.LocalDateTime;
         }
     }//GEN-LAST:event_jButtonCompleteOrderActionPerformed
 
+    private void jComboBoxCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCustomerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxCustomerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -738,7 +747,7 @@ import java.time.LocalDateTime;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton bttnBack;
-    private javax.swing.JButton jButtonCompleteOrder;
+    public javax.swing.JButton jButtonCompleteOrder;
     private javax.swing.JComboBox<String> jComboBoxCustomer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -19,6 +19,8 @@ public boolean presence(String str){
     return false;
 }
 
+
+//format check
 public boolean email(String str){
     int countAt = 0;
     int countDot = 0;

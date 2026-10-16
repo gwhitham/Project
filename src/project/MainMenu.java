@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author gerai
  */
 public class MainMenu extends javax.swing.JFrame {
-    public static String user = "main";
+    public static String user = "Owen";
 
     /**
      * Creates new form MainMenu
@@ -40,6 +40,7 @@ public class MainMenu extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         btnSales = new javax.swing.JButton();
+        bttnInherit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +81,13 @@ public class MainMenu extends javax.swing.JFrame {
         btnSales.setBackground(new java.awt.Color(204, 204, 255));
         btnSales.setText("Sales");
 
+        bttnInherit.setText("Inherit");
+        bttnInherit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnInheritActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -101,6 +109,10 @@ public class MainMenu extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(btnSales))
                 .addGap(93, 93, 93))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(152, 152, 152)
+                .addComponent(bttnInherit)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +134,9 @@ public class MainMenu extends javax.swing.JFrame {
                     .addComponent(btnSales))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(bttnInherit)
+                .addGap(45, 45, 45))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -174,6 +188,16 @@ public class MainMenu extends javax.swing.JFrame {
       this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void bttnInheritActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnInheritActionPerformed
+         ModifiedTillSystem m1 = null;
+        try {
+             m1 = new ModifiedTillSystem();
+        } catch (IOException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        m1.setVisible(true);
+    }//GEN-LAST:event_bttnInheritActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -211,6 +235,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSales;
+    private javax.swing.JButton bttnInherit;
     private javax.swing.JButton bttnProduct;
     private javax.swing.JButton customerButton;
     private javax.swing.JButton jButton1;

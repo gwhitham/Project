@@ -458,7 +458,7 @@ private boolean validateInputFields() {
         String costPrice = txtCost.getText();
         String quantity = txtQty.getText(); // Use txtQty instead of txtQuantity
         String category = (String) txtCategory.getSelectedItem(); // Get selected category from txtCategory
-
+        
         // Save product information to file
         try (FileWriter writer = new FileWriter("products.txt", true)) {
             String productData = productId + "," + productName + "," + productDescription + "," + price + "," +costPrice+ "," + quantity + "," + category + ","+gfilename+"\n";

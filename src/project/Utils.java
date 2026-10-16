@@ -5,9 +5,11 @@
 package project;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,6 +117,46 @@ public class Utils {
             JOptionPane.showMessageDialog(null, "Error saving image: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace(); // Print the stack trace for debugging
         }
+    }
+    public void emptyFile(String filename) throws IOException{
+        FileWriter fw = new FileWriter(filename);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write("");
+        bw.close();
+        fw.close();
+    }
+    
+    public void appendFile(String filename, String record) throws IOException{
+        FileWriter fw = new FileWriter(filename);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write(record);
+        bw.close();
+        fw.close();
+    }
+    
+    
+    public void deleteRecord(String filename, int id) throws IOException{
+        String [][] arr = getFileToArray(filename);
+        emptyFile(filename);
+        for(String [] row:arr){
+            if(!row[0].equals(id)){
+                String record = "";
+                boolean first = true;
+                for(String item:row){
+                    if(first){
+                        record=record+item;
+                        first=false;
+                    }
+                    else{
+                        record=record+","+item;
+                    }
+                    
+                }
+                appendFile(filename, record);
+            }
+        }
+        
+        
     }
     
 }
