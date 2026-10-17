@@ -326,6 +326,7 @@ public class CustomerForm extends javax.swing.JFrame {
         }
         
         
+        
     }//GEN-LAST:event_butSearchActionPerformed
 
     /**
