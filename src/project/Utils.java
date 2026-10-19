@@ -5,9 +5,11 @@
 package project;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +24,25 @@ import javax.swing.JOptionPane;
  * @author gerai
  */
 public class Utils {
+    
+    public void writeToFile(String filename, String details){
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(filename,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(details);
+            bw.newLine();
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
     public int countLines(String fileName) throws FileNotFoundException, IOException{
         int lineCount = 0;

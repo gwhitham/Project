@@ -5,6 +5,8 @@
  */
 package project;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -17,14 +19,23 @@ public class Project {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        MainMenu df = new MainMenu();
-        MainMenu menu2 = new MainMenu();
-        MainMenu menu3 = new MainMenu();
-        Login l1 = new Login();
-        //df.setVisible(true);
-        //l1.setVisible(true);
-        menu2.setVisible(true);
-        DataStructures d1 = new DataStructures();
+        try{
+            FileReader fr = new FileReader("admin.txt");
+            BufferedReader br = new BufferedReader(fr);
+            MainMenu df = new MainMenu();
+            MainMenu menu2 = new MainMenu();
+            MainMenu menu3 = new MainMenu();
+            Login l1 = new Login();
+            //df.setVisible(true);
+            //l1.setVisible(true);
+            menu2.setVisible(true);
+            DataStructures d1 = new DataStructures();
+        }
+        catch(IOException exception){
+            AdminUserForm a1 = new AdminUserForm("a");
+            a1.setVisible(true);
+        }
+        
     }
     
 }
