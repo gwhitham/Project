@@ -292,41 +292,25 @@ public class CustomerForm extends javax.swing.JFrame {
         m1.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+
+    
     private void butSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butSearchActionPerformed
-        FileReader fr = null;
-        try {
-            String name = txtFirstName.getText();
-            fr = new FileReader("customer.txt");
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            boolean found = false;
-            while((line=br.readLine())!=null){
-                String [] items = line.split(",");
-                if(items[1].equals(name)){
-                    JOptionPane.showMessageDialog(rootPane, "Item found");
-                    txtSurname.setText(items[2]);
-                    txtTelNo.setText(items[3]);
-                    txtEmail.setText(items[4]);
-                    txtID.setText(items[0]);
+        String name = txtFirstName.getText();
+        boolean found = false;
+        for(Customer customer:DataStructures.CustomerList){
+            if(customer.firstName.equals(name)){
+                JOptionPane.showMessageDialog(rootPane, "Item found");
+                    txtSurname.setText(customer.surname);
+                    txtTelNo.setText(customer.tel);
+                    txtEmail.setText(customer.email);
+                    txtID.setText(customer.ID);
                     found = true;
-                }
-            }   if(!found){
-                JOptionPane.showMessageDialog(rootPane, "Item not found");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
+                    break;
             }
         }
-        
-        
-        
+        if(!found){
+                JOptionPane.showMessageDialog(rootPane, "Customer not found");
+            }
     }//GEN-LAST:event_butSearchActionPerformed
 
     /**
