@@ -25,6 +25,29 @@ import javax.swing.JOptionPane;
  */
 public class Utils {
     
+    public Utils(){
+        
+    }
+    
+    public void writeToFile(String filename, String details){
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(filename,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(details);
+            bw.newLine();
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public int countLines(String fileName) throws FileNotFoundException, IOException{
         int lineCount = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -157,6 +180,15 @@ public class Utils {
         }
         
         
+    }
+    
+    public boolean checkArray(String searchTerm, int index, String [][] arr){
+        for(int i = 0; i<arr.length;i++){
+            if(arr[i][index].equals(searchTerm)){
+                return true;
+            }
+        }
+        return false;
     }
     
 }

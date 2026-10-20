@@ -254,7 +254,13 @@ public class CustomerForm extends javax.swing.JFrame {
 
         // Write the details to the file
         try (FileWriter writer = new FileWriter("customer.txt", true)) {
-            writer.write(customerIdCounter+","+firstName + "," + surname + "," + telNo +"," +email+ "\n");
+            Utils u1 = new Utils();
+            String [][] files = u1.getFileToArray("customer.txt");
+            if(u1.checkArray(txtID.getText(), 0, files)){
+                JOptionPane.showMessageDialog(this, "Cant duplicate ID", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                writer.write(txtID.getText()+","+firstName + "," + surname + "," + telNo +"," +email+ "\n");
             JOptionPane.showMessageDialog(this, "Customer details saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     txtFirstName.setText("");
                     txtSurname.setText("");
@@ -262,6 +268,8 @@ public class CustomerForm extends javax.swing.JFrame {
                     txtEmail.setText("");
                     customerIdCounter++;
                     txtID.setText(String.valueOf(customerIdCounter));
+            }
+            
                     
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -274,6 +282,8 @@ public class CustomerForm extends javax.swing.JFrame {
         txtSurname.setText("");
         txtTelNo.setText("");
         txtEmail.setText("");
+        customerIdCounter = generateCustomerId();
+        txtID.setText(String.valueOf(customerIdCounter));
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -282,39 +292,25 @@ public class CustomerForm extends javax.swing.JFrame {
         m1.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+
+    
     private void butSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butSearchActionPerformed
-        FileReader fr = null;
-        try {
-            String name = txtFirstName.getText();
-            fr = new FileReader("customer.txt");
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            boolean found = false;
-            while((line=br.readLine())!=null){
-                String [] items = line.split(",");
-                if(items[1].equals(name)){
-                    JOptionPane.showMessageDialog(rootPane, "Item found");
-                    txtSurname.setText(items[2]);
-                    txtTelNo.setText(items[3]);
-                    txtEmail.setText(items[4]);
+        String name = txtFirstName.getText();
+        boolean found = false;
+        for(Customer customer:DataStructures.CustomerList){
+            if(customer.getFirstName().equals(name)){
+                JOptionPane.showMessageDialog(rootPane, "Item found");
+                    txtSurname.setText(customer.getSurname());
+                    txtTelNo.setText(customer.getTel());
+                    txtEmail.setText(customer.getEmail());
+                    txtID.setText(customer.getID());
                     found = true;
-                }
-            }   if(!found){
-                JOptionPane.showMessageDialog(rootPane, "Item not found");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
+                    break;
             }
         }
-        
-        
+        if(!found){
+                JOptionPane.showMessageDialog(rootPane, "Customer not found");
+            }
     }//GEN-LAST:event_butSearchActionPerformed
 
     /**
