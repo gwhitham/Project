@@ -164,14 +164,27 @@ public class AdminUserForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String uName = txtUsername.getText();
         String pswd = txtPassword.getText();
-        if(uName.equals("")&&pswd.length()<passwordMin){
+        if(uName.equals("") || pswd.length()<passwordMin){
             JOptionPane.showMessageDialog(rootPane, "Username or password not valid");
         }
         else{
             Utils u1 = new Utils();
             String details = uName+","+pswd;
-            u1.writeToFile("admin.txt", details);
+            AdminUser [] usernames = DataStructures.getAdminList();
+            boolean duplicate = false;
+            for(AdminUser user: usernames){
+                if(user.getUsername().equals(uName)){
+                    duplicate = true;
+                }
+            }
+            if(duplicate){
+                JOptionPane.showMessageDialog(rootPane, "Username not valid, already taken");
+            }
+            else{
+                u1.writeToFile("admin.txt", details);
             JOptionPane.showMessageDialog(rootPane, "Details written to file");
+            }
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
