@@ -1,2 +1,2 @@
-admin,password123
-kali,kali
+admin,password123,0
+geraint,123456,1

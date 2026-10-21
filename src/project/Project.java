@@ -22,6 +22,7 @@ public class Project {
         try{
             FileReader fr = new FileReader("admin.txt");
             BufferedReader br = new BufferedReader(fr);
+            DataStructures d1 = new DataStructures();
             MainMenu df = new MainMenu();
             MainMenu menu2 = new MainMenu();
             MainMenu menu3 = new MainMenu();
@@ -29,7 +30,7 @@ public class Project {
             //df.setVisible(true);
             //l1.setVisible(true);
             menu2.setVisible(true);
-            DataStructures d1 = new DataStructures();
+            
         }
         catch(IOException exception){
             AdminUserForm a1 = new AdminUserForm("a");

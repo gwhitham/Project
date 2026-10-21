@@ -11,10 +11,20 @@ package project;
 public class AdminUser {
     private String username;
     private String password;
+    private String level;
 
-    public AdminUser(String username, String password) {
+    public AdminUser(String username, String password, String level) {
         this.username = username;
         this.password = password;
+        this.level = level;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getUsername() {

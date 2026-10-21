@@ -118,19 +118,28 @@ public class Login extends javax.swing.JFrame {
     private void bttnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnLoginActionPerformed
         String username = txtUsername.getText();
         String password = txtPassword.getText();
-        if(username.equals("admin")&&password.equals("1234")){
-            AdminMenu m1 = new AdminMenu();
-            m1.setVisible(true);
-            this.setVisible(false);
+        boolean found = false;
+        int level=2;
+        for(AdminUser user:DataStructures.getAdminList()){
+            if(username.equals(user.getUsername()) && password.equals(user.getPassword())){
+                found =true;
+                level = Integer.parseInt(user.getLevel());
+            }
         }
-        else if(username.equals("user")&&password.equals("1234")){
+    
+       if(found && level==0){
+          AdminMenu m1 = new AdminMenu();
+          m1.setVisible(true);
+          this.setVisible(false); 
+       }
+       else if(found && level==1){
             MainMenu m1 = new MainMenu();
             m1.setVisible(true);
             this.setVisible(false);
         }
-        else{
-            JOptionPane.showMessageDialog(rootPane, "Incorrect username or password");
-        }
+       else{
+           JOptionPane.showMessageDialog(rootPane, "Incorrect username or password");
+       }
     }//GEN-LAST:event_bttnLoginActionPerformed
 
     /**
