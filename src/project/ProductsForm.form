@@ -297,6 +297,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Calculate Sales Price"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bttnCalculateActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bttnSave">
       <Properties>

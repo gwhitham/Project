@@ -18,7 +18,19 @@ public boolean presence(String str){
     }
     return false;
 }
+//type check for decimal
 
+public boolean isDecimal(String str) {
+    if (str == null || str.trim().isEmpty()) {
+        return false;
+    }
+    try {
+        Double.parseDouble(str);
+        return true;
+    } catch (NumberFormatException e) {
+        return false;
+    }
+}
 
 //format check
 public boolean email(String str){

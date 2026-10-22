@@ -129,11 +129,12 @@ public class Login extends javax.swing.JFrame {
     
        if(found && level==0){
           AdminMenu m1 = new AdminMenu();
+          MainMenu.setUser(username);
           m1.setVisible(true);
           this.setVisible(false); 
        }
        else if(found && level==1){
-            MainMenu m1 = new MainMenu();
+            MainMenu m1 = new MainMenu(username);
             m1.setVisible(true);
             this.setVisible(false);
         }

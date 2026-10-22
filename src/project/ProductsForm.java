@@ -156,6 +156,11 @@ public class ProductsForm extends javax.swing.JFrame {
         jLabel9.setText("Sales Price");
 
         bttnCalculate.setText("Calculate Sales Price");
+        bttnCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnCalculateActionPerformed(evt);
+            }
+        });
 
         bttnSave.setText("Save");
         bttnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -551,6 +556,24 @@ private boolean validateInputFields() {
         MainMenu m1 = new MainMenu();
         m1.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void bttnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnCalculateActionPerformed
+        String content = new Utils().readFile("pricing.txt");
+        if(!content.equals("")){
+            float profit = Float.valueOf(content);
+            String cost = txtCost.getText();
+            Validation v = new Validation();
+            if(!v.isDecimal(cost)){
+                JOptionPane.showMessageDialog(rootPane, "Must be in valid price structure __.__");
+            }
+            else{
+                float fCost = Float.valueOf(cost);
+                float sales = ((profit/100)+1)*fCost;
+                String rounded = String.format("%.2f", sales);
+                txtSales.setText(String.valueOf(rounded));
+            }
+        }
+    }//GEN-LAST:event_bttnCalculateActionPerformed
 
     /**
      * @param args the command line arguments

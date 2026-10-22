@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 /**
@@ -190,5 +191,27 @@ public class Utils {
         }
         return false;
     }
+    
+    public String readFile(String filename){
+        FileReader fr = null;
+        try {
+            fr = new FileReader(filename);
+            BufferedReader br = new BufferedReader(fr);
+            //Shortcut to reading lines where lines read each lines and collect joins them all together by a carriage return \n
+            return br.lines().collect(Collectors.joining("\n"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return "";
+    }
+    
+    
+
     
 }

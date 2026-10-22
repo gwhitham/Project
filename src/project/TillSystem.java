@@ -47,7 +47,7 @@ import java.time.LocalDateTime;
 
      public TillSystem() throws IOException {
          initComponents();
-         txtUser.setText(MainMenu.user);
+         txtUser.setText(MainMenu.getUser());
          setButtons();
          fillCustomers();
          initializeBasketTable();

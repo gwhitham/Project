@@ -14,11 +14,26 @@ import java.util.logging.Logger;
  * @author gerai
  */
 public class MainMenu extends javax.swing.JFrame {
-    public static String user = "Owen";
+    private static String user;
+
+    public static String getUser() {
+        return user;
+    }
+
+    public static void setUser(String user) {
+        MainMenu.user = user;
+    }
+    
+    
 
     /**
      * Creates new form MainMenu
      */
+    public MainMenu(String user) {
+        initComponents();
+        this.user = user;
+    }
+    
     public MainMenu() {
         initComponents();
     }
