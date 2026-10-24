@@ -14,7 +14,7 @@ public class Order {
     private String [][] products;
     private double totalCost;
 
-    public Order(String customer, String orderid, String[][] products, double totalCost) {
+    public Order(String orderid, String customer, String[][] products, double totalCost) {
         this.customer = customer;
         this.orderid = orderid;
         this.products = products;
