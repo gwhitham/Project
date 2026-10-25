@@ -87,7 +87,9 @@ public class DataStructures {
                 matchingOrders[k][1] = matchingQty[k];
                 matchingOrders[k][2] = matchingPrice[k]; 
             }
-            orderList[i] = new Order(oList[i][0],u1.getCustomerFromID(oList[i][1]).getFirstName()+" "+u1.getCustomerFromID(oList[i][1]).getSurname(), matchingOrders, Double.valueOf(oList[i][2]));
+            String date = oList[i][3];
+            String [] dateTime = date.split("T");
+            orderList[i] = new Order(oList[i][0],u1.getCustomerFromID(oList[i][1]).getFirstName()+" "+u1.getCustomerFromID(oList[i][1]).getSurname(), matchingOrders, Double.valueOf(oList[i][2]),dateTime[0],dateTime[1]);
             prod ="";
             price ="";
             qty="";

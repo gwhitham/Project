@@ -13,12 +13,16 @@ public class Order {
     private String orderid;
     private String [][] products;
     private double totalCost;
-
-    public Order(String orderid, String customer, String[][] products, double totalCost) {
+    private String date;
+    private String time;
+    
+    public Order(String orderid, String customer, String[][] products, double totalCost, String date, String time) {
         this.customer = customer;
         this.orderid = orderid;
         this.products = products;
         this.totalCost = totalCost;
+        this.date = date;
+        this.time = time;
     }
 
     public String getCustomer() {
@@ -51,6 +55,22 @@ public class Order {
 
     public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
     
     
