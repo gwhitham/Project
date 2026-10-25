@@ -211,7 +211,23 @@ public class Utils {
         return "";
     }
     
+    public Customer getCustomerFromID(String ID){
+        for(Customer cust:DataStructures.CustomerList){
+            if(cust.getID().equals(ID)){
+                return cust;
+            }
+        }
+        return null;
+    }
     
+    public Product getProductFromID(String ID){
+       for(Product prod:DataStructures.productList){
+            if(prod.getId().equals(ID)){
+                return prod;
+            }
+        }
+        return null;
+    }
 
     
 }

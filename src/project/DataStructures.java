@@ -15,6 +15,7 @@ public class DataStructures {
     static Customer [] CustomerList;
     private static AdminUser [] adminList;
     private static Order [] orderList;
+    static Product [] productList;
 
     public DataStructures() throws IOException {
         Utils u1 = new Utils();
@@ -28,8 +29,9 @@ public class DataStructures {
         for(int i =0; i<aList.length;i++){
             adminList[i] = new AdminUser(aList[i][0],aList[i][1],aList[i][2]);
         }
+        
+        loadProducts();
         loadOrders();
-    
     }
 
     public static Order[] getOrderList() {
@@ -46,6 +48,15 @@ public class DataStructures {
         String [][] aList = u1.getFileToArray("admin.txt");
         for(int i =0; i<aList.length;i++){
             adminList[i] = new AdminUser(aList[i][0],aList[i][1],aList[i][2]);
+        }
+    }
+    
+    public void loadProducts() throws IOException{
+        Utils u1 = new Utils();
+        productList = new Product [u1.countLines("products.txt")]; 
+        String [][] pList = u1.getFileToArray("products.txt");
+        for(int i =0; i<pList.length;i++){
+            productList[i] = new Product(pList[i][0],pList[i][1],pList[i][2],Double.valueOf(pList[i][3]),Double.valueOf(pList[i][4]),Integer.valueOf(pList[i][5]),pList[i][6]);
         }
     }
     
@@ -72,11 +83,11 @@ public class DataStructures {
             String [] matchingPrice = price.split(",");
             String [][] matchingOrders= new String[matchingProducts.length][3];
             for(int k = 0; k<matchingProducts.length;k++){
-                matchingOrders[k][0] = matchingProducts[k];
+                matchingOrders[k][0] = u1.getProductFromID(matchingProducts[k]).getName();
                 matchingOrders[k][1] = matchingQty[k];
                 matchingOrders[k][2] = matchingPrice[k]; 
             }
-            orderList[i] = new Order(oList[i][0],oList[i][1], matchingOrders, Double.valueOf(oList[i][2]));
+            orderList[i] = new Order(oList[i][0],u1.getCustomerFromID(oList[i][1]).getFirstName()+" "+u1.getCustomerFromID(oList[i][1]).getSurname(), matchingOrders, Double.valueOf(oList[i][2]));
             prod ="";
             price ="";
             qty="";
