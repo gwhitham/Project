@@ -6,6 +6,7 @@
 package project;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,6 +96,11 @@ public class MainMenu extends javax.swing.JFrame {
 
         btnSales.setBackground(new java.awt.Color(204, 204, 255));
         btnSales.setText("Sales");
+        btnSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalesActionPerformed(evt);
+            }
+        });
 
         bttnInherit.setText("Inherit");
         bttnInherit.addActionListener(new java.awt.event.ActionListener() {
@@ -212,6 +218,15 @@ public class MainMenu extends javax.swing.JFrame {
         }
         m1.setVisible(true);
     }//GEN-LAST:event_bttnInheritActionPerformed
+
+    private void btnSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalesActionPerformed
+        try {
+            new SalesReport().setVisible(true);
+            this.setVisible(false);
+        } catch (ParseException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSalesActionPerformed
 
     /**
      * @param args the command line arguments

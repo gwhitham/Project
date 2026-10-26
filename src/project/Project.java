@@ -8,6 +8,9 @@ package project;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,6 +30,11 @@ public class Project {
             Login l1 = new Login();
             //df.setVisible(true);
             l1.setVisible(true);
+            try {
+                new SalesReport().setVisible(true);
+            } catch (ParseException ex) {
+                Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+            }
            
         }
         catch(IOException exception){

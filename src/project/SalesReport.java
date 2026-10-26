@@ -3,7 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project;
-
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 /**
  *
  * @author gera0276
@@ -13,10 +20,16 @@ public class SalesReport extends javax.swing.JFrame {
     /**
      * Creates new form SalesReport
      */
-    public SalesReport() {
+    public SalesReport() throws ParseException {
         initComponents();
+        setMask(); 
     }
 
+    public void setMask() throws ParseException{
+        MaskFormatter dateMask = new MaskFormatter("##/##/####");
+        dateMask.setPlaceholderCharacter('_');
+        txtFEndDate.setFormatterFactory(new DefaultFormatterFactory(dateMask));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,6 +45,7 @@ public class SalesReport extends javax.swing.JFrame {
         txtSDate = new javax.swing.JTextField();
         txtEDate = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        txtFEndDate = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,8 +79,10 @@ public class SalesReport extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSDate, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                            .addComponent(txtEDate))
+                            .addComponent(txtFEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtSDate, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                .addComponent(txtEDate)))
                         .addGap(46, 46, 46)
                         .addComponent(jButton1)))
                 .addContainerGap(71, Short.MAX_VALUE))
@@ -89,7 +105,9 @@ public class SalesReport extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jButton1)))
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(txtFEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(231, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,6 +116,20 @@ public class SalesReport extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        String sDate = txtSDate.getText();
        String eDate = txtEDate.getText();
+      
+       if(sDate.isEmpty()||eDate.isEmpty()){
+           JOptionPane.showMessageDialog(rootPane, "Invalid date format");
+       }
+       else{
+           String [] s = sDate.split("/");
+           String [] e = eDate.split("/");
+           LocalDate start = LocalDate.of(Integer.valueOf(s[2]), Integer.valueOf(s[1]), Integer.valueOf(s[0]));
+           LocalDate end = LocalDate.of(Integer.valueOf(e[2]), Integer.valueOf(e[1]), Integer.valueOf(e[0]));
+       }
+       double total =0;
+       for(Order current:DataStructures.getOrderList()){
+           
+       }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -130,7 +162,11 @@ public class SalesReport extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SalesReport().setVisible(true);
+                try {
+                    new SalesReport().setVisible(true);
+                } catch (ParseException ex) {
+                    Logger.getLogger(SalesReport.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -141,6 +177,7 @@ public class SalesReport extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField txtEDate;
+    private javax.swing.JFormattedTextField txtFEndDate;
     private javax.swing.JTextField txtSDate;
     // End of variables declaration//GEN-END:variables
 }
