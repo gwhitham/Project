@@ -9,6 +9,7 @@ import java.time.Month;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 /**
@@ -16,19 +17,32 @@ import javax.swing.text.MaskFormatter;
  * @author gera0276
  */
 public class SalesReport extends javax.swing.JFrame {
-
+    String TOTAL_ROW_IDENTIFIER = "Total:";
+    private DefaultTableModel salesTable;
     /**
      * Creates new form SalesReport
      */
     public SalesReport() throws ParseException {
         initComponents();
         setMask(); 
+        initialiseTable();
+        salesTable.addRow(new Object[]{null, null, null, TOTAL_ROW_IDENTIFIER, "0"});
     }
 
+    private void initialiseTable(){
+    salesTable = new DefaultTableModel(
+                 // Updated column names
+                 new String[]{"Date", "Order ID", "Order Amount"}, 0
+         );
+    tableResults.setModel(salesTable);
+            
+    }
+    
     public void setMask() throws ParseException{
         MaskFormatter dateMask = new MaskFormatter("##/##/####");
         dateMask.setPlaceholderCharacter('_');
         txtFEndDate.setFormatterFactory(new DefaultFormatterFactory(dateMask));
+        txtFStartDate.setFormatterFactory(new DefaultFormatterFactory(dateMask));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,10 +56,11 @@ public class SalesReport extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtSDate = new javax.swing.JTextField();
-        txtEDate = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         txtFEndDate = new javax.swing.JFormattedTextField();
+        txtFStartDate = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableResults = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,12 +71,22 @@ public class SalesReport extends javax.swing.JFrame {
 
         jLabel3.setText("End Date");
 
-        jButton1.setText("Results");
+        jButton1.setText("Total Sales");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        tableResults.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null}
+            },
+            new String [] {
+                "Date", "OrderID", "Sub Total"
+            }
+        ));
+        jScrollPane1.setViewportView(tableResults);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,9 +95,6 @@ public class SalesReport extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -80,12 +102,17 @@ public class SalesReport extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtFEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtSDate, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                                .addComponent(txtEDate)))
+                            .addComponent(txtFStartDate))
                         .addGap(46, 46, 46)
-                        .addComponent(jButton1)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(jLabel1)))
+                .addContainerGap(91, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,39 +124,46 @@ public class SalesReport extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(txtSDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtFStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtEDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtFEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jButton1)))
-                .addGap(18, 18, 18)
-                .addComponent(txtFEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addGap(57, 57, 57)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       String sDate = txtSDate.getText();
-       String eDate = txtEDate.getText();
-      
+       String sDate = txtFStartDate.getText();
+       String eDate = txtFEndDate.getText();
+       LocalDate start = null;
+       LocalDate end = null;
        if(sDate.isEmpty()||eDate.isEmpty()){
            JOptionPane.showMessageDialog(rootPane, "Invalid date format");
        }
        else{
            String [] s = sDate.split("/");
            String [] e = eDate.split("/");
-           LocalDate start = LocalDate.of(Integer.valueOf(s[2]), Integer.valueOf(s[1]), Integer.valueOf(s[0]));
-           LocalDate end = LocalDate.of(Integer.valueOf(e[2]), Integer.valueOf(e[1]), Integer.valueOf(e[0]));
+           start = LocalDate.of(Integer.valueOf(s[2]), Integer.valueOf(s[1]), Integer.valueOf(s[0]));
+           end = LocalDate.of(Integer.valueOf(e[2]), Integer.valueOf(e[1]), Integer.valueOf(e[0]));
+           double total =0;
+           for(Order current:DataStructures.getOrderList()){
+                String []  o = current.getDate().split("-");
+                LocalDate oDate = LocalDate.of(Integer.valueOf(o[0]), Integer.valueOf(o[1]), Integer.valueOf(o[2]));
+                if (oDate.isBefore(end)&& oDate.isAfter(start)){
+                    total = total+current.getTotalCost();
+                }
+            }
+           salesTable.addRow(new Object[]{null, TOTAL_ROW_IDENTIFIER, "£"+total});
        }
-       double total =0;
-       for(Order current:DataStructures.getOrderList()){
-           
-       }
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -176,8 +210,9 @@ public class SalesReport extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField txtEDate;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableResults;
     private javax.swing.JFormattedTextField txtFEndDate;
-    private javax.swing.JTextField txtSDate;
+    private javax.swing.JFormattedTextField txtFStartDate;
     // End of variables declaration//GEN-END:variables
 }
