@@ -158,18 +158,17 @@ public class SalesReport extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(rootPane, "Invalid date format");
        }
        else{
+           
            String [] s = sDate.split("/");
            String [] e = eDate.split("/");
            start = LocalDate.of(Integer.valueOf(s[2]), Integer.valueOf(s[1]), Integer.valueOf(s[0]));
            end = LocalDate.of(Integer.valueOf(e[2]), Integer.valueOf(e[1]), Integer.valueOf(e[0]));
-           double total =0;
-           for(Order current:DataStructures.getOrderList()){
-                String []  o = current.getDate().split("-");
-                LocalDate oDate = LocalDate.of(Integer.valueOf(o[0]), Integer.valueOf(o[1]), Integer.valueOf(o[2]));
-                if (oDate.isBefore(end)&& oDate.isAfter(start)){
-                    total = total+current.getTotalCost();
-                }
-            }
+           int [] range = new Utils().calculateRange(start, end);
+           double total = new Utils().findTotalSales(start, end);
+           double [] sales = new Utils().findRangeSales(range, start, end);
+           for(double sale:sales){
+               salesTable.addRow(new Object[]{null, "year", "£"+sale});
+           }
            salesTable.addRow(new Object[]{null, TOTAL_ROW_IDENTIFIER, "£"+total});
            bttnGraph.setVisible(true);
        }

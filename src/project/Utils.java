@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Period;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -229,5 +232,52 @@ public class Utils {
         return null;
     }
 
+    // Will calculate the range given and work out the scale of the graph. It will also return the number of y/m/d
+    // 0 years
+    // 1 months
+    // 2 days
+    public int[] calculateRange(LocalDate startDate, LocalDate endDate){
+        int [] values = new int[2];
+        Period range = Period.between(startDate, endDate);
+        if(range.getYears()>1){
+            values[0] = 0;
+            values[1] = range.getYears();
+            return values;
+        }
+        else if(range.getMonths()>1){
+            values[0] = 1;
+            values[1] = range.getMonths();
+            return values;
+        }
+        values[0] = 2;
+        values[1] = range.getDays();
+        return values;
+        
+    }
+    
+    public double[] findRangeSales(int [] range,LocalDate startDate, LocalDate endDate){
+        double [] sales = new double[range[1]];
+        if(range[0]==0){
+            for(int i=0; i<range[1];i++){
+                LocalDate current = LocalDate.of(startDate.getYear()+i, Month.JANUARY, 1);
+                LocalDate currentEnd = LocalDate.of(startDate.getYear()+i, Month.DECEMBER, 31);
+                sales[i] = findTotalSales(current,currentEnd);
+            }
+        }
+        return sales;
+    }
+    
+    public double findTotalSales(LocalDate startDate, LocalDate endDate){
+        double total = 0;
+        for(Order current:DataStructures.getOrderList()){
+                String []  o = current.getDate().split("-");
+                LocalDate oDate = LocalDate.of(Integer.valueOf(o[0]), Integer.valueOf(o[1]), Integer.valueOf(o[2]));
+                if (oDate.isBefore(endDate)&& oDate.isAfter(startDate)){
+                    total = total+current.getTotalCost();
+                }
+            }
+        return total;
+    }
+    
     
 }

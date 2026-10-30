@@ -4,6 +4,9 @@
  */
 package project;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  *
  * @author geraint
@@ -16,7 +19,13 @@ public class MyGraphs extends javax.swing.JFrame {
     public MyGraphs() {
         initComponents();
     }
-
+    
+    public MyGraphs(LocalDate startDate, LocalDate endDate) {
+        initComponents();
+        int [] graphRange = new Utils().calculateRange(startDate, endDate);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
