@@ -27,6 +27,7 @@ public class SalesReport extends javax.swing.JFrame {
         setMask(); 
         initialiseTable();
         salesTable.addRow(new Object[]{null, null, null, TOTAL_ROW_IDENTIFIER, "0"});
+        bttnGraph.setVisible(false);
     }
 
     private void initialiseTable(){
@@ -61,6 +62,7 @@ public class SalesReport extends javax.swing.JFrame {
         txtFStartDate = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableResults = new javax.swing.JTable();
+        bttnGraph = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,10 +90,16 @@ public class SalesReport extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tableResults);
 
+        bttnGraph.setText("Show Graph");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -107,12 +115,11 @@ public class SalesReport extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(148, 148, 148)
-                        .addComponent(jLabel1)))
-                .addContainerGap(91, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 39, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(183, 183, 183)
+                        .addComponent(bttnGraph)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,7 +141,9 @@ public class SalesReport extends javax.swing.JFrame {
                         .addComponent(jButton1)))
                 .addGap(57, 57, 57)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(bttnGraph)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         pack();
@@ -145,7 +154,7 @@ public class SalesReport extends javax.swing.JFrame {
        String eDate = txtFEndDate.getText();
        LocalDate start = null;
        LocalDate end = null;
-       if(sDate.isEmpty()||eDate.isEmpty()){
+       if(sDate.startsWith("_")||eDate.startsWith("_")){
            JOptionPane.showMessageDialog(rootPane, "Invalid date format");
        }
        else{
@@ -162,6 +171,7 @@ public class SalesReport extends javax.swing.JFrame {
                 }
             }
            salesTable.addRow(new Object[]{null, TOTAL_ROW_IDENTIFIER, "£"+total});
+           bttnGraph.setVisible(true);
        }
        
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -206,6 +216,7 @@ public class SalesReport extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bttnGraph;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
