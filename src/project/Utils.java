@@ -244,9 +244,10 @@ public class Utils {
             values[1] = range.getYears();
             return values;
         }
-        else if(range.getMonths()>1){
+        else if(range.getYears()>0||range.getMonths()>2){
             values[0] = 1;
-            values[1] = range.getMonths();
+            
+            values[1] = range.getMonths()+range.getYears()*12;
             return values;
         }
         values[0] = 2;
@@ -255,13 +256,43 @@ public class Utils {
         
     }
     
-    public double[] findRangeSales(int [] range,LocalDate startDate, LocalDate endDate){
-        double [] sales = new double[range[1]];
+    public double[][] findRangeSales(int [] range,LocalDate startDate, LocalDate endDate){
+        double [][] sales = new double[range[1]+1][2];
         if(range[0]==0){
-            for(int i=0; i<range[1];i++){
-                LocalDate current = LocalDate.of(startDate.getYear()+i, Month.JANUARY, 1);
-                LocalDate currentEnd = LocalDate.of(startDate.getYear()+i, Month.DECEMBER, 31);
-                sales[i] = findTotalSales(current,currentEnd);
+            LocalDate current;
+            for(int i=0; i<=range[1];i++){
+                if(i==0){
+                    current = startDate;
+                }
+                else{
+                    current = LocalDate.of(startDate.getYear()+i, Month.JANUARY, 1);
+                }
+                 
+                LocalDate currentEnd;
+                if(current.getYear()==LocalDate.now().getYear()){
+                    currentEnd = endDate;
+                }
+                else{
+                    currentEnd = LocalDate.of(startDate.getYear()+i, Month.DECEMBER, 31);
+                }
+                 
+                sales[i][0] = findTotalSales(current,currentEnd);
+                sales[i][1] = Math.round(startDate.getYear()+i);
+            }
+        }
+        else if(range[0]==1){
+            LocalDate current = startDate;
+            for(int i=0; i<=range[1];i++){
+                current = startDate.plusMonths(i);
+                if(i!=0){
+                    current = current.withDayOfMonth(1);
+                }
+                LocalDate currentEnd = current.plusMonths(1);
+                if(current.getYear()==LocalDate.now().getYear()&& current.getMonth()==LocalDate.now().getMonth()){
+                    currentEnd = endDate;
+                }
+                sales[i][0] = findTotalSales(current,currentEnd);
+                sales[i][1] = current.getYear() + ((startDate.getMonthValue()+i)/100);
             }
         }
         return sales;
@@ -272,7 +303,7 @@ public class Utils {
         for(Order current:DataStructures.getOrderList()){
                 String []  o = current.getDate().split("-");
                 LocalDate oDate = LocalDate.of(Integer.valueOf(o[0]), Integer.valueOf(o[1]), Integer.valueOf(o[2]));
-                if (oDate.isBefore(endDate)&& oDate.isAfter(startDate)){
+                if (!oDate.isAfter(endDate)&& !oDate.isBefore(startDate)){
                     total = total+current.getTotalCost();
                 }
             }

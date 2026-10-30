@@ -165,9 +165,11 @@ public class SalesReport extends javax.swing.JFrame {
            end = LocalDate.of(Integer.valueOf(e[2]), Integer.valueOf(e[1]), Integer.valueOf(e[0]));
            int [] range = new Utils().calculateRange(start, end);
            double total = new Utils().findTotalSales(start, end);
-           double [] sales = new Utils().findRangeSales(range, start, end);
-           for(double sale:sales){
-               salesTable.addRow(new Object[]{null, "year", "£"+sale});
+           double [][] sales = new Utils().findRangeSales(range, start, end);
+           
+           salesTable.setRowCount(0);
+           for(double [] sale:sales){
+               salesTable.addRow(new Object[]{sale[1], null, "£"+sale[0]});
            }
            salesTable.addRow(new Object[]{null, TOTAL_ROW_IDENTIFIER, "£"+total});
            bttnGraph.setVisible(true);
