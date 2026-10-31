@@ -11,12 +11,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -287,12 +290,16 @@ public class Utils {
                 if(i!=0){
                     current = current.withDayOfMonth(1);
                 }
-                LocalDate currentEnd = current.plusMonths(1);
+                LocalDate currentEnd = current.with(TemporalAdjusters.lastDayOfMonth());
                 if(current.getYear()==LocalDate.now().getYear()&& current.getMonth()==LocalDate.now().getMonth()){
                     currentEnd = endDate;
                 }
                 sales[i][0] = findTotalSales(current,currentEnd);
-                sales[i][1] = current.getYear() + ((startDate.getMonthValue()+i)/100);
+                double month = startDate.getMonthValue();
+                double value = current.getYear() + ((month+i)/100);
+                BigDecimal bd = new BigDecimal(Double.toString(value));
+                bd = bd.setScale(2, RoundingMode.HALF_UP);
+                sales[i][1] = bd.doubleValue();
             }
         }
         return sales;

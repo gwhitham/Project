@@ -169,7 +169,12 @@ public class SalesReport extends javax.swing.JFrame {
            
            salesTable.setRowCount(0);
            for(double [] sale:sales){
-               salesTable.addRow(new Object[]{sale[1], null, "£"+sale[0]});
+               String date = String.valueOf(sale[1]);
+               String [] yearMonth = date.split("\\.");
+               if(yearMonth[1].equals("1")){
+                   yearMonth[1]="10";
+               }
+               salesTable.addRow(new Object[]{yearMonth[0]+"/"+yearMonth[1], null, "£"+sale[0]});
            }
            salesTable.addRow(new Object[]{null, TOTAL_ROW_IDENTIFIER, "£"+total});
            bttnGraph.setVisible(true);
