@@ -27,6 +27,9 @@ import javax.swing.ListModel;
  * @author gera0276
  */
 public class ProductsForm extends javax.swing.JFrame {
+    //FIXME: Need to be able to write an image file into a linux directory - works in windows
+    //FIXME: Need to be able to add a .JPEG file as well as .jpg
+    //FIXME: Currently to importer to records can't deal with any commas in any of the fields
     //Instantiate an object of the Validation class
     Validation v = new Validation();
     String gfilename = "";
