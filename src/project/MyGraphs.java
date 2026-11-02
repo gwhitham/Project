@@ -3,26 +3,82 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project;
-
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
+import javax.swing.table.TableCellEditor;
 import java.time.LocalDate;
 import java.time.Period;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author geraint
  */
 public class MyGraphs extends javax.swing.JFrame {
-
+    String graphType;
+    String xAxis;
+    String yAxis;
+    String Title;
     /**
      * Creates new form MyGraphs
      */
     public MyGraphs() {
         initComponents();
+        this.graphType = "line";
+        runGraph();
     }
     
-    public MyGraphs(LocalDate startDate, LocalDate endDate) {
+    public MyGraphs(LocalDate startDate, LocalDate endDate, String graphType, String xAxis, String yAxis, String title) {
         initComponents();
         int [] graphRange = new Utils().calculateRange(startDate, endDate);
+        this.Title = title;
+        this.graphType = graphType;
+        this.xAxis = xAxis;
+        this.yAxis = yAxis;
+        runGraph();
+    }
+    
+    public void runGraph(){
+        if(graphType.equals("pie")){
+           createPie();
+        }
+        else if(graphType.equals("line")){
+           createLine();
+        }
+        else if(graphType.equals("bar")){
+           createBar();
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "No viable graph");
+        }
+    }
+    
+    public void createPie(){
+        
+    }
+    
+    public void createLine(){
+        lblGraphTitle.setText("Sales");
+
+        Graphics2D g=(Graphics2D) pnlGraph.getGraphics();
+
+        //Set the colour of the background and a frame to go round it
+
+        g.setColor(Color.white);
+
+        g.fillRect(0,20,770,480);
+
+        g.setColor(Color.black);
+
+        g.drawRect(0,20,770,480); 
+    }
+    
+    public void createBar(){
+      Graphics2D g=(Graphics2D) pnlGraph.getGraphics();  
     }
     
     
@@ -35,30 +91,30 @@ public class MyGraphs extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        myPanel = new javax.swing.JPanel();
+        lblGraphTitle = new javax.swing.JLabel();
+        pnlGraph = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout myPanelLayout = new javax.swing.GroupLayout(myPanel);
-        myPanel.setLayout(myPanelLayout);
-        myPanelLayout.setHorizontalGroup(
-            myPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        myPanelLayout.setVerticalGroup(
-            myPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        pnlGraph.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(myPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(227, 227, 227)
+                .addComponent(lblGraphTitle)
+                .addContainerGap(312, Short.MAX_VALUE))
+            .addComponent(pnlGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(myPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblGraphTitle)
+                .addGap(68, 68, 68)
+                .addComponent(pnlGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -100,6 +156,7 @@ public class MyGraphs extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel myPanel;
+    private javax.swing.JLabel lblGraphTitle;
+    private javax.swing.JPanel pnlGraph;
     // End of variables declaration//GEN-END:variables
 }

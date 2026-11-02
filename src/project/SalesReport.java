@@ -19,6 +19,7 @@ import javax.swing.text.MaskFormatter;
 public class SalesReport extends javax.swing.JFrame {
     String TOTAL_ROW_IDENTIFIER = "Total:";
     private DefaultTableModel salesTable;
+    String reportType = "Default";
     /**
      * Creates new form SalesReport
      */
@@ -92,6 +93,11 @@ public class SalesReport extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableResults);
 
         bttnGraph.setText("Show Graph");
+        bttnGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnGraphActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(255, 204, 204));
         jButton3.setText("back");
@@ -166,6 +172,7 @@ public class SalesReport extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       reportType = "Sales";
        String sDate = txtFStartDate.getText();
        String eDate = txtFEndDate.getText();
        LocalDate start = null;
@@ -203,6 +210,15 @@ public class SalesReport extends javax.swing.JFrame {
         MainMenu m1 = new MainMenu();
         m1.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void bttnGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnGraphActionPerformed
+        if(reportType.equals("Default")){
+            JOptionPane.showMessageDialog(rootPane, "Must select data in order to create graph");
+        }
+        else{
+            new MyGraphs().setVisible(true);
+        }
+    }//GEN-LAST:event_bttnGraphActionPerformed
 
     /**
      * @param args the command line arguments
