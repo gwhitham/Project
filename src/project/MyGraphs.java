@@ -23,6 +23,7 @@ public class MyGraphs extends javax.swing.JFrame {
     String xAxis;
     String yAxis;
     String Title;
+    String [] xDetails;
     /**
      * Creates new form MyGraphs
      */
@@ -32,13 +33,13 @@ public class MyGraphs extends javax.swing.JFrame {
         runGraph();
     }
     
-    public MyGraphs(LocalDate startDate, LocalDate endDate, String graphType, String xAxis, String yAxis, String title) {
+    public MyGraphs(String [] xDetails, double [] yDetails, String xAxis, String yAxis, String title, String graphtype) {
         initComponents();
-        int [] graphRange = new Utils().calculateRange(startDate, endDate);
         this.Title = title;
-        this.graphType = graphType;
+        this.graphType = graphtype;
         this.xAxis = xAxis;
         this.yAxis = yAxis;
+        this.xDetails = xDetails;
         runGraph();
     }
     
@@ -62,20 +63,45 @@ public class MyGraphs extends javax.swing.JFrame {
     }
     
     public void createLine(){
-        lblGraphTitle.setText("Sales");
-
-        Graphics2D g=(Graphics2D) pnlGraph.getGraphics();
-
-        //Set the colour of the background and a frame to go round it
-
-        g.setColor(Color.white);
-
-        g.fillRect(0,20,770,480);
-
-        g.setColor(Color.black);
-
-        g.drawRect(0,20,770,480); 
+    lblGraphTitle.setText("Sales");
+    
+    // 1. Create a BufferedImage. 
+    // We use hardcoded dimensions here just in case the panel hasn't fully sized itself yet in the constructor.
+    BufferedImage img = new BufferedImage(770, 500, BufferedImage.TYPE_INT_ARGB);
+    
+    // 2. Get the graphics context from the IMAGE, not the panel
+    Graphics2D g = img.createGraphics();
+    
+    Font sanSerifFont = new Font("SanSerif", Font.PLAIN, 14);
+    g.setFont(sanSerifFont);
+    
+    //Set the colour of the background and a frame to go round it
+    g.setColor(Color.white);
+    g.fillRect(0,20,770,480);
+    g.setColor(Color.black);
+    g.drawRect(0,20,770,480); 
+    
+    g.drawLine(100,100,100,400);
+    g.drawLine(100,400,660,400);
+    g.drawLine(660,400,660,100);
+    int count = 0;
+    for(String date:xDetails){
+        g.drawLine(100+80*count,400,100+80*count,410);
+        g.drawString(date,130+80*count,428);
+        count++;
     }
+    g.drawLine(100+80*count,400,100+80*count,410);
+    
+    g.dispose(); // Free up memory
+    
+    // 3. Apply the image to the panel
+    pnlGraph.removeAll();
+    pnlGraph.add(new JLabel(new ImageIcon(img)));
+    pnlGraph.revalidate();
+    pnlGraph.repaint();
+    
+    this.pack();
+}
     
     public void createBar(){
       Graphics2D g=(Graphics2D) pnlGraph.getGraphics();  

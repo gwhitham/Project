@@ -20,6 +20,10 @@ public class SalesReport extends javax.swing.JFrame {
     String TOTAL_ROW_IDENTIFIER = "Total:";
     private DefaultTableModel salesTable;
     String reportType = "Default";
+    String [] xDetails;
+    double [] yDetails;
+    String xAxis;
+    String yAxis;
     /**
      * Creates new form SalesReport
      */
@@ -171,8 +175,31 @@ public class SalesReport extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void updateDetails(double[][]sales, String type){
+        reportType = type;
+        xDetails = new String[sales.length];
+        yDetails = new double[sales.length];
+        int count = 0;
+        for(double [] sale:sales){
+               String date = String.valueOf(sale[1]);
+               String [] yearMonth = date.split("\\.");
+               if(yearMonth[1].equals("1")){
+                   yearMonth[1]="10";
+               }
+               xDetails[count]= yearMonth[0]+"/"+yearMonth[1];
+               yDetails[count]= sale[1];
+               count++;
+           }
+        if(type.equals("Sales")){
+            xAxis="Date";
+            yAxis = "Sales (£)";
+        }
+        
+    }
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       reportType = "Sales";
+       
        String sDate = txtFStartDate.getText();
        String eDate = txtFEndDate.getText();
        LocalDate start = null;
@@ -189,6 +216,7 @@ public class SalesReport extends javax.swing.JFrame {
            int [] range = new Utils().calculateRange(start, end);
            double total = new Utils().findTotalSales(start, end);
            double [][] sales = new Utils().findRangeSales(range, start, end);
+           updateDetails(sales,"Sales");
            
            salesTable.setRowCount(0);
            for(double [] sale:sales){
@@ -216,7 +244,7 @@ public class SalesReport extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Must select data in order to create graph");
         }
         else{
-            new MyGraphs().setVisible(true);
+            new MyGraphs(xDetails, yDetails, xAxis, yAxis, reportType, "line").setVisible(true);
         }
     }//GEN-LAST:event_bttnGraphActionPerformed
 
