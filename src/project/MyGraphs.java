@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author geraint
  */
+//Pointless Comment
 public class MyGraphs extends javax.swing.JFrame {
     String graphType;
     String xAxis;
