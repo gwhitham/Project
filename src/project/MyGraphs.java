@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.table.TableCellEditor;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ public class MyGraphs extends javax.swing.JFrame {
     String yAxis;
     String Title;
     String [] xDetails;
+    double [] yDetails;
     /**
      * Creates new form MyGraphs
      */
@@ -41,6 +43,7 @@ public class MyGraphs extends javax.swing.JFrame {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.xDetails = xDetails;
+        this.yDetails = yDetails;
         runGraph();
     }
     
@@ -65,7 +68,12 @@ public class MyGraphs extends javax.swing.JFrame {
     
     public void createLine(){
     lblGraphTitle.setText("Sales");
-    
+    double max = yDetails[0];
+    for(int i = 1;i<yDetails.length;i++){
+        if(yDetails[i]>max){
+            max = yDetails[i];
+        }
+    }
     // 1. Create a BufferedImage. 
     // We use hardcoded dimensions here just in case the panel hasn't fully sized itself yet in the constructor.
     BufferedImage img = new BufferedImage(770, 500, BufferedImage.TYPE_INT_ARGB);
@@ -81,17 +89,32 @@ public class MyGraphs extends javax.swing.JFrame {
     g.fillRect(0,20,770,480);
     g.setColor(Color.black);
     g.drawRect(0,20,770,480); 
-    
+    //660/20/33
     g.drawLine(100,100,100,400);
     g.drawLine(100,400,660,400);
     g.drawLine(660,400,660,100);
     int count = 0;
+    int yScale = (int) (300/max);
+    int xScale = 560/xDetails.length;
+    //Drawing the x axis scale
     for(String date:xDetails){
-        g.drawLine(100+80*count,400,100+80*count,410);
-        g.drawString(date,130+80*count,428);
+        g.drawLine(100+xScale*count,400,100+xScale*count,410);
+        g.drawString(date.substring(2, 7),130+xScale*count,428);
         count++;
     }
-    g.drawLine(100+80*count,400,100+80*count,410);
+    g.drawLine(100+xScale*count,400,100+xScale*count,410);
+    int labelScale = (int) (max/6);
+    String caption="";
+    for (int y=0; y<=6;y++){
+        g.drawLine(100,400-50*y,90,400-50*y);
+        caption = Integer.toString(labelScale*y);
+        caption = "£"+caption;
+        g.drawString(caption,36, 406-50*y);
+    }
+    g.drawString(yAxis,10,224);
+    
+
+    
     
     g.dispose(); // Free up memory
     

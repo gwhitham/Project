@@ -187,7 +187,7 @@ public class SalesReport extends javax.swing.JFrame {
                    yearMonth[1]="10";
                }
                xDetails[count]= yearMonth[0]+"/"+yearMonth[1];
-               yDetails[count]= sale[1];
+               yDetails[count]= sale[0];
                count++;
            }
         if(type.equals("Sales")){

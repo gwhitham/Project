@@ -296,7 +296,15 @@ public class Utils {
                 }
                 sales[i][0] = findTotalSales(current,currentEnd);
                 double month = startDate.getMonthValue();
-                double value = current.getYear() + ((month+i)/100);
+                double calc;
+                if(month+i%12==0){
+                    calc = 12;
+                }
+                else{
+                    calc = (((month+i)%12)+1);
+                }
+                 
+                double value = current.getYear() + (calc/100);
                 BigDecimal bd = new BigDecimal(Double.toString(value));
                 bd = bd.setScale(2, RoundingMode.HALF_UP);
                 sales[i][1] = bd.doubleValue();
