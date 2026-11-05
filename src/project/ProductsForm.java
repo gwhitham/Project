@@ -28,7 +28,6 @@ import javax.swing.ListModel;
  */
 public class ProductsForm extends javax.swing.JFrame {
     //FIXME: Need to be able to write an image file into a linux directory - works in windows
-    //FIXME: Need to be able to add a .JPEG file as well as .jpg
     //FIXME: Currently to importer to records can't deal with any commas in any of the fields
     //Instantiate an object of the Validation class
     Validation v = new Validation();
@@ -523,13 +522,14 @@ private boolean validateInputFields() {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final String EXTENSION = ".jpg";
         final String EXTENSION2 = ".png";
+        final String EXTENSION3 = ".jpeg";
       JFileChooser fileChooser = new JFileChooser();
       int returnValue = fileChooser.showOpenDialog(null);
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File selectedFile = fileChooser.getSelectedFile();
         String fileName = selectedFile.getName();
         gfilename = fileName;
-        if (fileName.endsWith(EXTENSION)||fileName.endsWith(EXTENSION2)) {
+        if (fileName.endsWith(EXTENSION)||fileName.endsWith(EXTENSION2)||fileName.endsWith(EXTENSION3)) {
             try {
                 /*String oldname = selectedFile.getName();
                 String [] suffix = oldname.split("\\.");
