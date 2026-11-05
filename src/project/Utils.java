@@ -325,5 +325,30 @@ public class Utils {
         return total;
     }
     
+    public String myTerribleHash(String plain){
+        int key = 5;
+        String hash = "";
+        char [] mychar = plain.toCharArray();
+        for(char c:mychar){
+            int newc =(int)c+key;
+            char charint = (char) newc;
+            hash = hash+charint;
+        }
+        
+        return hash;
+    }
+    
+    public String reverseHash(String plain){
+        int key = -5;
+        String hash = "";
+        char [] mychar = plain.toCharArray();
+        for(char c:mychar){
+            int newc =(int)c+key;
+            char charint = (char) newc;
+            hash = hash+charint;
+        }
+        return hash;
+    }
+    
     
 }

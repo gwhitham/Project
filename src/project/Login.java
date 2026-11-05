@@ -120,6 +120,7 @@ public class Login extends javax.swing.JFrame {
         String password = txtPassword.getText();
         boolean found = false;
         int level=2;
+        AdminUser[] my = DataStructures.getAdminList();
         for(AdminUser user:DataStructures.getAdminList()){
             if(username.equals(user.getUsername()) && password.equals(user.getPassword())){
                 found =true;

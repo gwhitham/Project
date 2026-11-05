@@ -50,6 +50,7 @@ public class AdminUserForm extends javax.swing.JFrame {
         comboLevel = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,6 +94,13 @@ public class AdminUserForm extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Encrypt");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -100,11 +108,15 @@ public class AdminUserForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(135, 135, 135)
-                        .addComponent(lblComplexity)))
+                        .addComponent(lblComplexity))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(151, 151, 151)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jButton3))
+                            .addComponent(jButton1))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -157,7 +169,9 @@ public class AdminUserForm extends javax.swing.JFrame {
                 .addComponent(lblComplexity)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -205,7 +219,9 @@ public class AdminUserForm extends javax.swing.JFrame {
         }
         else{
             Utils u1 = new Utils();
-            String details = uName+","+pswd+","+String.valueOf(level);
+            String enUsername = u1.myTerribleHash(uName);
+            String enPassword = u1.myTerribleHash(pswd);
+            String details = enUsername+","+enPassword+","+String.valueOf(level);
             try{
                 AdminUser [] usernames = DataStructures.getAdminList();
                 boolean duplicate = false;
@@ -241,6 +257,21 @@ public class AdminUserForm extends javax.swing.JFrame {
         AdminMenu m1 = new AdminMenu();
         m1.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       String uName = txtUsername.getText();
+        String pswd = txtPassword.getText();
+        int level = comboLevel.getSelectedIndex();
+        if(uName.equals("") || pswd.length()<passwordMin){
+            JOptionPane.showMessageDialog(rootPane, "Username or password not valid");
+        }
+        else{
+            Utils u1 = new Utils();
+            String enUsername = u1.myTerribleHash(uName);
+            String enPassword = u1.myTerribleHash(pswd);
+            u1.writeToFile("test.txt", enUsername+","+enPassword+"\n");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -281,6 +312,7 @@ public class AdminUserForm extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboLevel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

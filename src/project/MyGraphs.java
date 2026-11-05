@@ -48,17 +48,19 @@ public class MyGraphs extends javax.swing.JFrame {
     }
     
     public void runGraph(){
-        if(graphType.equals("pie")){
-           createPie();
-        }
-        else if(graphType.equals("line")){
-           createLine();
-        }
-        else if(graphType.equals("bar")){
-           createBar();
-        }
-        else{
-            JOptionPane.showMessageDialog(rootPane, "No viable graph");
+        switch (graphType) {
+            case "pie":
+                createPie();
+                break;
+            case "line":
+                createLine();
+                break;
+            case "bar":
+                createBar();
+                break;
+            default:
+                JOptionPane.showMessageDialog(rootPane, "No viable graph");
+                break;
         }
     }
     
@@ -104,7 +106,7 @@ public class MyGraphs extends javax.swing.JFrame {
     }
     g.drawLine(100+xScale*count,400,100+xScale*count,410);
     int labelScale = (int) (max/6);
-    String caption="";
+    String caption;
     for (int y=0; y<=6;y++){
         g.drawLine(100,400-50*y,90,400-50*y);
         caption = Integer.toString(labelScale*y);
