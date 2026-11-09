@@ -36,6 +36,8 @@ import java.time.LocalDateTime;
 
 
  public class TillSystem extends javax.swing.JFrame {
+     //FIXME: Need to check stock and show sold out if the item is not in stock
+     //FIXME: Need to remove stock when completing an order
      Utils u1 = new Utils();
      private DefaultTableModel basketModel;
      private static final String IMAGE_FOLDER = "temp_images/";
@@ -682,6 +684,8 @@ import java.time.LocalDateTime;
                     bw1.close();
                     productOrderID++;
                 }
+                DataStructures.loadOrders();
+                DataStructures.loadProducts();
                 JOptionPane.showMessageDialog(rootPane, "Order Complete - Order ID"+orderID);
                 initializeBasketTable();
                 

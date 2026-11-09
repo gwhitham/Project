@@ -52,7 +52,7 @@ public class DataStructures {
         }
     }
     
-    public void loadProducts() throws IOException{
+    public static void loadProducts() throws IOException{
         Utils u1 = new Utils();
         productList = new Product [u1.countLines("products.txt")]; 
         String [][] pList = u1.getFileToArray("products.txt");
@@ -61,7 +61,7 @@ public class DataStructures {
         }
     }
     
-    public void loadOrders() throws IOException{
+    public static void loadOrders() throws IOException{
         Utils u1 = new Utils();
         orderList = new Order [u1.countLines("orders.txt")]; 
         String [][] oList = u1.getFileToArray("orders.txt");

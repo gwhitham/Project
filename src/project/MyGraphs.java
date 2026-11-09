@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
  */
 //Pointless Comment
 public class MyGraphs extends javax.swing.JFrame {
+    //FIXME: Need to add the bar to the graph
     String graphType;
     String xAxis;
     String yAxis;

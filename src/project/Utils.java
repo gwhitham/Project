@@ -294,14 +294,14 @@ public class Utils {
                 if(current.getYear()==LocalDate.now().getYear()&& current.getMonth()==LocalDate.now().getMonth()){
                     currentEnd = endDate;
                 }
-                sales[i][0] = findTotalSales(current,currentEnd);
+                sales[i][0] = Math.round(findTotalSales(current,currentEnd)*100.0)/100.0;
                 double month = startDate.getMonthValue();
                 double calc;
                 if(month+i%12==0){
                     calc = 12;
                 }
                 else{
-                    calc = (((month+i)%12)+1);
+                    calc = (((month+i)%12));
                 }
                  
                 double value = current.getYear() + (calc/100);
