@@ -157,22 +157,18 @@ public class Utils {
     }
     
     public void appendFile(String filename, String record) throws IOException{
-        FileWriter fw = new FileWriter(filename);
+        FileWriter fw = new FileWriter(filename,true);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(record);
         bw.close();
         fw.close();
     }
     
-    
-    public void deleteRecord(String filename, int id) throws IOException{
-        String [][] arr = getFileToArray(filename);
-        emptyFile(filename);
-        for(String [] row:arr){
-            if(!row[0].equals(id)){
-                String record = "";
+    //Get an array record and turn into a line ready to write to a file.
+    public String arrToString(String [] arr){
+        String record = "";
                 boolean first = true;
-                for(String item:row){
+                for(String item:arr){
                     if(first){
                         record=record+item;
                         first=false;
@@ -180,10 +176,38 @@ public class Utils {
                     else{
                         record=record+","+item;
                     }
-                    
                 }
-                appendFile(filename, record);
+            return record;
+    }
+    
+    public void deleteRecord(String filename, int id) throws IOException{
+        String [][] arr = getFileToArray(filename);
+        emptyFile(filename);
+        for(String [] row:arr){
+            String record = "";
+            if(!row[0].equals(id)){
+                appendFile(filename,arrToString(row)); 
             }
+            
+        }
+        
+        
+    }
+    
+    public void amendRecord (String filename, int id,int field, String update) throws IOException{
+        String [][] arr = getFileToArray(filename);
+        emptyFile(filename);
+        for(String [] row:arr){
+            String record = "";
+            if(row[0].equals(id)){
+                row[field]= update;
+                appendFile(filename,arrToString(row));
+            }
+            else{
+                appendFile(filename,arrToString(row));
+            }
+            
+        
         }
         
         
