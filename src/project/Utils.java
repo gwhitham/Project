@@ -36,6 +36,15 @@ public class Utils {
         
     }
     
+    public Product getProduct(int id, Product []list){
+        for(Product p:list){
+            if(p.getId().equals(String.valueOf(id))){
+                return p;
+            }
+        }
+        return null;
+    }
+    
     public void writeToFile(String filename, String details){
         FileWriter fw = null;
         try {
@@ -160,6 +169,7 @@ public class Utils {
         FileWriter fw = new FileWriter(filename,true);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(record);
+        bw.newLine();
         bw.close();
         fw.close();
     }
@@ -194,12 +204,12 @@ public class Utils {
         
     }
     
-    public void amendRecord (String filename, int id,int field, String update) throws IOException{
+    public void amendRecord (String filename, int id, int field, String update) throws IOException{
         String [][] arr = getFileToArray(filename);
         emptyFile(filename);
         for(String [] row:arr){
             String record = "";
-            if(row[0].equals(id)){
+            if(row[0].equals(String.valueOf(id))){
                 row[field]= update;
                 appendFile(filename,arrToString(row));
             }

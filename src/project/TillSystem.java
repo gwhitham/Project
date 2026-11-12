@@ -676,6 +676,10 @@ import java.time.LocalDateTime;
                     int productID = Integer.parseInt(basketModel.getValueAt(i, 1).toString());
                     int qty = Integer.parseInt(basketModel.getValueAt(i, 2).toString());
                     double price = Double.parseDouble((basketModel.getValueAt(i, 3).toString()));
+                    Product p1 = u1.getProduct(productID, DataStructures.productList);
+                    int newQty = p1.getQty()-qty;
+                    u1.amendRecord("product.txt", productID, 5, String.valueOf(newQty));
+                    
                     System.out.println(qty+" "+price);
                     FileWriter fw1 = new FileWriter("productOrder.txt",true);
                     BufferedWriter bw1  = new BufferedWriter(fw1);

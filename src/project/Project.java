@@ -21,7 +21,8 @@ public class Project {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    
+    public static void standard(){
         try{
             FileReader fr = new FileReader("admin.txt");
             BufferedReader br = new BufferedReader(fr);
@@ -41,6 +42,27 @@ public class Project {
             AdminUserForm a1 = new AdminUserForm("a");
             a1.setVisible(true);
         }
+    }
+    
+    
+    public static void test(){
+        try {
+            DataStructures d1 = new DataStructures();
+            Product [] myProducts = DataStructures.productList;
+            String [][] arr = new Utils().getFileToArray("product.txt");
+        for(String [] row:arr){
+            row[1]="";
+            System.out.println(new Utils().arrToString(row));
+        }
+            new Utils().amendRecord("product.txt", 1, 5, "65");
+        } catch (IOException ex) {
+            Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) {
+        //test();
+        standard();
     }
     
 }

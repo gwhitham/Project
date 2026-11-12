@@ -1,0 +1,10 @@
+1,16Gb DDR5 RAM,Corsair 1x16GB DDR5 RAM,8.50,8.50,5,Hardware,sample logo.png
+2,Intel Core i7 14700K,Intel Core i7 14700K Unlocked Processor,250,250,10,Hardware,i7.jpg
+3,Microsoft Office Home and Business 2024,Microsoft Office Home and Business 2024 Download PC or MAC Microsoft Office Home & Business 2024 is a comprehensive productivity suite designed for users who prefer a one-time purchase for essential Office applications making it an ideal choice for families small businesses and independent professionals. Offering a blend of modern features and classic tools this version continues Microsoft's tradition of reliability and functionality while enhancing user experience with new and improved elements.,235,200,50,Software,officeHB.jpg
+4,HP Z1 G9 Tower Workstation,Operating systemWindows 11 Pro ProcessorIntel® Core™ i5 14500 (14th Generation)Memory16 GB RAM Storage512 GB SSD GraphicsNVIDIA® T400 (4 GB),1250.56,1050,2,Servers,hp server.png
+5,RAm 64GB,Very big RAM,1750,1250,2,Hardware,ram.jpg
+6,Fan,Amazing Fan,60,50,20,Hardware,null
+7,VicTsing Gaming Mouse,7200 DPI Gaming Mouse VicTsing Programmable 7 Button LED Wired Gaming Mouse PC Mouse Computer Mouse with 5 Adjustable DPI Level,29.99,19.50,5,Peripherals,mouse2.jpg
+8,PicTek wired gaming mouse,The base levels of DPI,13.99,5.99,5,Peripherals,mouse.jpeg
+9,Razer Naga 2014 ,Razer Naga 2014 MMO Gaming Mouse ,29.99,25.62,20,Peripherals,razer mouse.jpg
+10,Norton 360 1 yr,Enjoy real-time protection for 1 device  Get anti-spyware,24.90,20,480,AV,norton.jpeg
