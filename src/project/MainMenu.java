@@ -182,9 +182,9 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_customerButtonActionPerformed
 
     private void bttnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnProductActionPerformed
-        ProductsForm p1 = null;
+        ProductMenu p1 = null;
         try {
-            p1 = new ProductsForm();
+            p1 = new ProductMenu();
         } catch (IOException ex) {
             Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
