@@ -16,8 +16,9 @@ public class Product {
     private double sales;
     private int qty;
     private String category;
+    private String imagePath;
 
-    public Product(String id, String name, String description, double cost, double sales, int qty, String category) {
+    public Product(String id, String name, String description, double cost, double sales, int qty, String category, String imagePath) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,6 +26,15 @@ public class Product {
         this.sales = sales;
         this.qty = qty;
         this.category = category;
+        this.imagePath = imagePath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getCategory() {

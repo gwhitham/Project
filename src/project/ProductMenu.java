@@ -17,6 +17,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -28,6 +29,7 @@ import javax.swing.ListModel;
  */
 //FIXMe: Import to table on constructor
 public class ProductMenu extends javax.swing.JFrame {
+    private DefaultTableModel productTableModel;
     Validation v = new Validation();
     String gfilename = "";
     Utils u1 = new Utils();
@@ -43,6 +45,18 @@ public class ProductMenu extends javax.swing.JFrame {
             cats[i]=br.readLine();
         }
         
+    }
+     
+     private void initialiseTable(){
+            productTableModel = new EditableTableModel(
+                 // Updated column names
+                 new String[]{"ProductID", "Name", "Category", "Image File", "Cost Price", "Sales Price", "Quantity"},0, 1,2,3,4,5,6
+         );
+            productTable.setModel(productTableModel);
+            for(Product current:DataStructures.productList){
+                productTableModel.addRow(new Object[]{current.getId(), current.getName(), current.getCategory(),current.getImagePath(),current.getCost(),current.getSales(), current.getQty()});
+            }
+            
     }
     
     
@@ -65,6 +79,7 @@ public class ProductMenu extends javax.swing.JFrame {
         productIdCounter = generateCustomerId();
         txtID.setText(String.valueOf(productIdCounter));
         txtImageConfirm.setVisible(false);
+        initialiseTable();
     }
     
     
@@ -170,9 +185,9 @@ public class ProductMenu extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
+        btnToggle = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -214,8 +229,6 @@ public class ProductMenu extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Edit");
-
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -229,6 +242,13 @@ public class ProductMenu extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(productTable);
 
+        btnToggle.setText("Editable");
+        btnToggle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToggleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -237,10 +257,10 @@ public class ProductMenu extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jButton5)
-                        .addGap(31, 31, 31))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnToggle)
+                        .addGap(44, 44, 44))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton4)
                         .addGap(32, 32, 32)
@@ -259,8 +279,8 @@ public class ProductMenu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jButton5)))
+                        .addGap(144, 144, 144)
+                        .addComponent(btnToggle)))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
 
@@ -674,6 +694,31 @@ public class ProductMenu extends javax.swing.JFrame {
         m1.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void btnToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleActionPerformed
+      
+    // 1. Get the model and cast it directly to your custom class
+    EditableTableModel model = (EditableTableModel) productTable.getModel();
+    
+    // 2. Flip the state
+    boolean newState = !model.isTableEditable();
+    model.setTableEditable(newState);
+    
+    // 3. Update UI
+    if (newState) {
+        btnToggle.setText("Lock Table");
+    } 
+    else {
+        btnToggle.setText("Edit Table");
+        
+        // Stop editing immediately if the user is currently typing in a cell
+        if (productTable.isEditing()) {
+            productTable.getCellEditor().stopCellEditing();
+        }
+    }
+    
+        
+    }//GEN-LAST:event_btnToggleActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -714,6 +759,7 @@ public class ProductMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnToggle;
     private javax.swing.JButton bttnCalculate;
     private javax.swing.JButton bttnConfirm;
     private javax.swing.JButton bttnReset;
@@ -722,7 +768,6 @@ public class ProductMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

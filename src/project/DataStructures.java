@@ -57,7 +57,7 @@ public class DataStructures {
         productList = new Product [u1.countLines("products.txt")]; 
         String [][] pList = u1.getFileToArray("products.txt");
         for(int i =0; i<pList.length;i++){
-            productList[i] = new Product(pList[i][0],pList[i][1],pList[i][2],Double.valueOf(pList[i][3]),Double.valueOf(pList[i][4]),Integer.valueOf(pList[i][5]),pList[i][6]);
+            productList[i] = new Product(pList[i][0],pList[i][1],pList[i][2],Double.valueOf(pList[i][3]),Double.valueOf(pList[i][4]),Integer.valueOf(pList[i][5]),pList[i][6],pList[i][7]);
         }
     }
     
