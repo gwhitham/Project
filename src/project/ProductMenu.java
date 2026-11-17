@@ -26,6 +26,7 @@ import javax.swing.ListModel;
  *
  * @author geraint
  */
+//FIXMe: Import to table on constructor
 public class ProductMenu extends javax.swing.JFrame {
     Validation v = new Validation();
     String gfilename = "";
