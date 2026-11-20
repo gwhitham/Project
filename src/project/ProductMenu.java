@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -17,7 +19,9 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -35,6 +39,8 @@ public class ProductMenu extends javax.swing.JFrame {
     Utils u1 = new Utils();
     String [] cats;
     int productIdCounter;
+    private boolean isTableModified = false;
+    private Set<Integer> modifiedRows = new HashSet<>();
     
      public void getCategories() throws FileNotFoundException, IOException{
         FileReader fr = new FileReader("category.txt");
@@ -56,6 +62,17 @@ public class ProductMenu extends javax.swing.JFrame {
             for(Product current:DataStructures.productList){
                 productTableModel.addRow(new Object[]{current.getId(), current.getName(), current.getCategory(),current.getImagePath(),current.getCost(),current.getSales(), current.getQty()});
             }
+            productTable.getModel().addTableModelListener(e -> {
+                isTableModified = true;
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int firstRow = e.getFirstRow();
+                    int lastRow = e.getLastRow();
+
+                    for (int row = firstRow; row <= lastRow; row++) {
+                        modifiedRows.add(row);
+                    }
+                 }
+            });
             
     }
     
@@ -96,6 +113,7 @@ public class ProductMenu extends javax.swing.JFrame {
         txtID.setText(String.valueOf(productIdCounter));
         txtImageConfirm.setVisible(false);
         initialiseTable();
+        bttnEditSave.setVisible(false);
     }
     
     
@@ -207,6 +225,7 @@ public class ProductMenu extends javax.swing.JFrame {
         txtSearchTerm = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
+        bttnEditSave = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -283,6 +302,13 @@ public class ProductMenu extends javax.swing.JFrame {
             }
         });
 
+        bttnEditSave.setText("Save");
+        bttnEditSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttnEditSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -298,12 +324,13 @@ public class ProductMenu extends javax.swing.JFrame {
                         .addComponent(jLabel11)
                         .addGap(18, 18, 18)
                         .addComponent(txtSearchTerm, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnToggle)
-                    .addComponent(jButton5))
-                .addGap(37, 37, 37))
+                    .addComponent(jButton5)
+                    .addComponent(bttnEditSave))
+                .addGap(36, 36, 36))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,7 +350,10 @@ public class ProductMenu extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnToggle))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnToggle)
+                        .addGap(18, 18, 18)
+                        .addComponent(bttnEditSave)))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
 
@@ -749,9 +779,11 @@ public class ProductMenu extends javax.swing.JFrame {
     // 3. Update UI
     if (newState) {
         btnToggle.setText("Lock Table");
+        bttnEditSave.setVisible(true);
     } 
     else {
         btnToggle.setText("Edit Table");
+        bttnEditSave.setVisible(false);
         
         // Stop editing immediately if the user is currently typing in a cell
         if (productTable.isEditing()) {
@@ -776,6 +808,60 @@ public class ProductMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "No products found");
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void bttnEditSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnEditSaveActionPerformed
+       
+        if (productTable.isEditing()) {
+            productTable.getCellEditor().stopCellEditing();
+        }
+
+        if (!isTableModified || modifiedRows.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "No changes made");
+            return;
+        }
+
+        int choice = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to edit these details?",
+            "Confirm Edit",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            TableModel model = productTable.getModel();
+
+            // Maps JTable column index -> products.txt column index
+            int[] fileColumnMap = {0, 1, 6, 7, 3, 4, 5};
+
+            for (int row : modifiedRows) {
+                int id = Integer.parseInt(model.getValueAt(row, 0).toString());
+
+                // Start at i = 1 to skip ProductID, and stop before getColumnCount()
+                for (int i = 1; i < model.getColumnCount(); i++) {
+                    Object value = model.getValueAt(row, i);
+                    String field = (value != null) ? value.toString() : "";
+                    int fileCol = fileColumnMap[i];
+
+                    try {
+                        u1.amendRecord("products.txt", id, fileCol, field);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ProductMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+            // Reset tracking after a successful save
+            modifiedRows.clear();
+            isTableModified = false;
+            JOptionPane.showMessageDialog(this, "Changes saved successfully.");
+            try {
+                DataStructures.loadProducts();
+            } catch (IOException ex) {
+                Logger.getLogger(ProductMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_bttnEditSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -820,6 +906,7 @@ public class ProductMenu extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnToggle;
     private javax.swing.JButton bttnCalculate;
     private javax.swing.JButton bttnConfirm;
+    private javax.swing.JButton bttnEditSave;
     private javax.swing.JButton bttnReset;
     private javax.swing.JButton bttnSave;
     private javax.swing.JButton jButton1;
